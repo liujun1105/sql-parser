@@ -1,0 +1,1 @@
+SELECT t.a AS ta FROM T AS t

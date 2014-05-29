@@ -1,0 +1,1 @@
+select t.a - t.b as MIN_FUNC, COUNT(t.c) from T as t group by MIN_FUNC

@@ -1,0 +1,1 @@
+select t.a as ta from T as t;
