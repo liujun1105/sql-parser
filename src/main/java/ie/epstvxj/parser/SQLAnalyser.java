@@ -525,61 +525,39 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 
 		List<SQLJoinType> joinTypes = new ArrayList<SQLJoinType>();
 
-		int joinTypeIndex = 0;
 		for (int i = 0; i < childCount; i++) {
 			ParseTree child = ctx.getChild(i);
 			String text = child.getText();
 
 			if (text.equalsIgnoreCase("LEFT")) {
-				if (!joinTypes.isEmpty() && joinTypes.get(joinTypeIndex - 1) == SQLJoinType.NATURAL_JOIN) {
-					joinTypes.remove(joinTypeIndex - 1);
-					joinTypes.add(SQLJoinType.NATURAL_LEFT_JOIN);
-				} else {
-					joinTypes.add(SQLJoinType.LEFT_JOIN);
-					joinTypeIndex++;
-				}
+				joinTypes.add(SQLJoinType.LEFT_JOIN);
 			} else if (text.equalsIgnoreCase("RIGHT")) {
-				if (!joinTypes.isEmpty() && joinTypes.get(joinTypeIndex - 1) == SQLJoinType.NATURAL_JOIN) {
-					joinTypes.remove(joinTypeIndex - 1);
-					joinTypes.add(SQLJoinType.NATURAL_RIGHT_JOIN);
-				} else {
-					joinTypes.add(SQLJoinType.RIGHT_JOIN);
-					joinTypeIndex++;
-				}
+				joinTypes.add(SQLJoinType.RIGHT_JOIN);
 			} else if (text.equalsIgnoreCase("FULL")) {
-				if (!joinTypes.isEmpty() && joinTypes.get(joinTypeIndex - 1) == SQLJoinType.NATURAL_JOIN) {
-					joinTypes.remove(joinTypeIndex - 1);
-					joinTypes.add(SQLJoinType.NATURAL_FULL_JOIN);
-				} else {
-					joinTypes.add(SQLJoinType.FULL_JOIN);
-					joinTypeIndex++;
-				}
+				joinTypes.add(SQLJoinType.FULL_JOIN);
 			} else if (text.equalsIgnoreCase("INNER")) {
-				if (!joinTypes.isEmpty() && joinTypes.get(joinTypeIndex - 1) == SQLJoinType.NATURAL_JOIN) {
-					joinTypes.remove(joinTypeIndex - 1);
-					joinTypes.add(SQLJoinType.NATURAL_INNER_JOIN);
-				} else {
-					joinTypes.add(SQLJoinType.INNER_JOIN);
-					joinTypeIndex++;
-				}
-			} else if (text.equalsIgnoreCase("NATURAL")) {
-				joinTypes.add(SQLJoinType.NATURAL_JOIN);
-				joinTypeIndex++;
+				joinTypes.add(SQLJoinType.INNER_JOIN);
+			} else if (text.equalsIgnoreCase("NATURALLEFT")) {
+				joinTypes.add(SQLJoinType.NATURAL_LEFT_JOIN);
+			} else if (text.equalsIgnoreCase("NATURALRIGHT")) {
+				joinTypes.add(SQLJoinType.NATURAL_RIGHT_JOIN);
+			} else if (text.equalsIgnoreCase("NATURALFULL")) {
+				joinTypes.add(SQLJoinType.NATURAL_FULL_JOIN);
+			} else if (text.equalsIgnoreCase("NATURALINNER")) {
+				joinTypes.add(SQLJoinType.NATURAL_INNER_JOIN);
 			} else if (text.equalsIgnoreCase("CROSS")) {
 				joinTypes.add(SQLJoinType.CROSS_JOIN);
-				joinTypeIndex++;
 			} else if (text.equalsIgnoreCase("UNION")) {
 				joinTypes.add(SQLJoinType.UNION_JOIN);
-				joinTypeIndex++;
 			} else if (text.equalsIgnoreCase("JOIN")) {
 				ParseTree prevChild = ctx.getChild(i - 1);
 				String prevText = prevChild.getText();
 				if (!prevText.equalsIgnoreCase("LEFT") && !prevText.equalsIgnoreCase("RIGHT")
-						&& !prevText.equalsIgnoreCase("FULL") && !prevText.equalsIgnoreCase("NATURAL")
-						&& !prevText.equalsIgnoreCase("INNER") && !prevText.equalsIgnoreCase("CROSS")
-						&& !prevText.equalsIgnoreCase("UNION")) {
+						&& !prevText.equalsIgnoreCase("FULL") && !prevText.equalsIgnoreCase("NATURALLEFT")
+						&& !prevText.equalsIgnoreCase("NATURALRIGHT") && !prevText.equalsIgnoreCase("NATURALFULL")
+						&& !prevText.equalsIgnoreCase("NATURALINNER") && !prevText.equalsIgnoreCase("INNER")
+						&& !prevText.equalsIgnoreCase("CROSS") && !prevText.equalsIgnoreCase("UNION")) {
 					joinTypes.add(SQLJoinType.JOIN);
-					joinTypeIndex++;
 				}
 			}
 
@@ -611,8 +589,6 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 				join = SQLBuilder.build().naturalFullJoin();
 			} else if (joinTypes.get(joinIndex) == SQLJoinType.NATURAL_INNER_JOIN) {
 				join = SQLBuilder.build().naturalInnerJoin();
-			} else if (joinTypes.get(joinIndex) == SQLJoinType.NATURAL_JOIN) {
-				join = SQLBuilder.build().naturalJoin();
 			} else if (joinTypes.get(joinIndex) == SQLJoinType.LEFT_JOIN) {
 				join = SQLBuilder.build().leftJoin();
 			} else if (joinTypes.get(joinIndex) == SQLJoinType.RIGHT_JOIN) {
