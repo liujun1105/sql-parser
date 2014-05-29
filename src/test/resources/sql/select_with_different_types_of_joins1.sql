@@ -1,0 +1,1 @@
+select t.a, f.b from T as t inner join F as f on t.a = f.b left join H as h on f.c = h.c natural left join G as g cross join I as i union join J as j natural inner join K as k;

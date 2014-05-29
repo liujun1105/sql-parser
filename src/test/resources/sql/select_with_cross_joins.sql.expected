@@ -1,0 +1,1 @@
+SELECT t.a, f.b FROM T AS t LEFT JOIN F AS f ON t.a = f.b AND f.b > 100 LEFT JOIN H AS h ON f.c = h.c

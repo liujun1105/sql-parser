@@ -1,3 +1,9 @@
+/**
+ * SQL Parser
+ * 
+ * @author jun 
+ * @since 29 May 2014
+ */
 package ie.epstvxj.parser;
 
 import static org.junit.Assert.fail;
@@ -12,13 +18,6 @@ import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-/**
- * SQL Parser
- * 
- * @author jun 
- * @since 29 May 2014
- */
 
 /**
  * @author jun

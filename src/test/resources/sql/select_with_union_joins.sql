@@ -1,0 +1,1 @@
+select t.a, f.b from T as t union join F as f union join H as h;
