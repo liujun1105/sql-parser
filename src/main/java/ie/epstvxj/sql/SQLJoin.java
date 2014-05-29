@@ -39,9 +39,10 @@ public class SQLJoin extends AbstractSQLConstruct {
 		StringBuilder sql = new StringBuilder();
 
 		sql.append(joinType.toSql()).append(SQLGrammarTokens.SPACE);
-		sql.append(getTargetSource().toSql()).append(SQLGrammarTokens.SPACE);
+		sql.append(getTargetSource().toSql());
 		if (-1 != this.searchConditionsIndex) {
-			sql.append(SQLGrammarTokens.ON).append(SQLGrammarTokens.SPACE).append(getConditions().toSql());
+			sql.append(SQLGrammarTokens.SPACE).append(SQLGrammarTokens.ON).append(SQLGrammarTokens.SPACE)
+					.append(getConditions().toSql());
 		}
 		return sql.toString();
 	}
