@@ -1,0 +1,149 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>ie.epstvxj</groupId>
+	<artifactId>sql-parser</artifactId>
+	<version>1.0</version>
+
+	<packaging>jar</packaging>
+
+	<name>SQL Language Parser</name>
+	<description>SQL Language Parser</description>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/main/java/</directory>
+							<!-- make sure maven only deletes auto-generated java files during 
+								clean phase -->
+							<includes>
+								<include>**/*BaseListener.java</include>
+								<include>**/*Listener.java</include>
+								<include>**/*Lexer.java</include>
+								<include>**/*Parser.java</include>
+								<include>**/**.tokens</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr4-maven-plugin</artifactId>
+				<version>4.1</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>antlr4</goal>
+						</goals>
+						<!-- The generated Java classes should all in package ie.dpmg.poc.parser 
+							and stored in the folder src/main/java/ie/dpmg/poc/parser. -->
+						<configuration>
+							<sourceDirectory>src/main/resources</sourceDirectory>
+							<arguments>
+								<argument>-o</argument>
+								<argument>target/generated-sources/antlr4/ie/epstvxj/parser</argument>
+								<argument>-package</argument>
+								<argument>ie.epstvxj.parser</argument>
+							</arguments>
+							<includes>
+								<include>**/SQLGrammar.g4</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<directory>target</directory>
+					<outputDirectory>target/classes</outputDirectory>
+					<finalName>${artifactId}-${version}</finalName>
+					<testOutputDirectory>target/test-classes</testOutputDirectory>
+					<sourceDirectory>src/main/java</sourceDirectory>
+					<scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
+					<testSourceDirectory>src/test/java</testSourceDirectory>
+					<resources>
+						<resource>
+							<directory>src/main/resources</directory>
+						</resource>
+					</resources>
+					<testResources>
+						<testResource>
+							<directory>src/test/resources</directory>
+						</testResource>
+					</testResources>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.antlr</groupId>
+										<artifactId>
+											antlr4-maven-plugin
+										</artifactId>
+										<versionRange>
+											[4.1,)
+										</versionRange>
+										<goals>
+											<goal>antlr4</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4-runtime</artifactId>
+			<version>4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4</artifactId>
+			<version>4.1</version>
+		</dependency>
+	</dependencies>
+</project>
