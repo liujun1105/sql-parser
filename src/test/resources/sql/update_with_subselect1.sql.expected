@@ -1,0 +1,1 @@
+UPDATE T SET a = (SELECT f.a FROM F AS f)

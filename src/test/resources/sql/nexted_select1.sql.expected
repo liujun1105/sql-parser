@@ -1,0 +1,1 @@
+SELECT a, b, c FROM T1 WHERE a IN (SELECT a FROM T2)

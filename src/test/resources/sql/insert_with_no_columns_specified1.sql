@@ -1,0 +1,1 @@
+insert into T values ('v1', 'v2');

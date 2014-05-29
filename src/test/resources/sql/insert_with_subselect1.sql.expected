@@ -1,0 +1,1 @@
+INSERT INTO T (a, b) SELECT a, b FROM F

@@ -1,0 +1,1 @@
+delete from T where a = 1;

@@ -1,0 +1,1 @@
+update T set a = 'v'

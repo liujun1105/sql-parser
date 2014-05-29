@@ -1,0 +1,1 @@
+insert into T (a, b) select a, b from F;

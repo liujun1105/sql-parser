@@ -1,0 +1,1 @@
+INSERT INTO T (a, b) VALUES ('v1', 'v2')

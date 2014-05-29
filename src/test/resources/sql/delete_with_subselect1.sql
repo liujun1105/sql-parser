@@ -1,0 +1,1 @@
+delete from T where exists (select a from F where T.a = T.a);

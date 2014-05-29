@@ -1,0 +1,1 @@
+select a, b, c from T where a = 1 and b = '15-10-2017' or c in (1, 2, 3)
