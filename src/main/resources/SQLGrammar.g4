@@ -753,7 +753,6 @@ outer_join          : outer_join_type (OUTER)?;
 join_specification  : join_condition | named_columns_join;
 join_condition      : ON search_condition;
 named_columns_join  : USING Left_Paren join_column_list Right_Paren;
-//join_type           : INNER | outer_join_type (OUTER)?;
 outer_join_type     : LEFT | RIGHT | FULL;
 join_column_list    : column_name_list;
 
