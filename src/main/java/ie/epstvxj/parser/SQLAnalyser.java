@@ -1119,7 +1119,8 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 	}
 
 	@Override
-	public void enterParameterized_value(@NotNull final SQLGrammarParser.Parameterized_valueContext ctx) {
+	public void enterDynamic_parameter_specification(
+			@NotNull final SQLGrammarParser.Dynamic_parameter_specificationContext ctx) {
 		sqlConstructStack.push(SQLBuilder.init().dynamicParameter().withSQLQueryContext(queryContextStack.peek()));
 	}
 
