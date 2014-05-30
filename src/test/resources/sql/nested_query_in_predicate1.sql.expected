@@ -1,0 +1,1 @@
+SELECT a FROM A WHERE a = (SELECT b FROM B WHERE b = (SELECT c FROM C WHERE c = 'test'))

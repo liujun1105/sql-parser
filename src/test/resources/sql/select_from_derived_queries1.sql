@@ -1,0 +1,1 @@
+SELECT p.a FROM (SELECT f.b FROM F AS f LEFT JOIN H AS h ON h.d = f.b) AS n1 LEFT JOIN (SELECT * FROM T AS t WHERE t.a > 100) AS s ON f.b = s.a LEFT JOIN (SELECT z FROM P) AS p ON p.z = s.a

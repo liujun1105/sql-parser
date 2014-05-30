@@ -1,1 +1,1 @@
-select t.a - t.b as MIN_FUNC, COUNT(t.c) from T as t group by MIN_FUNC
+SELECT t.a - t.b + t.c AS MIN_FUNC, COUNT(t.c) FROM T AS t GROUP BY MIN_FUNC

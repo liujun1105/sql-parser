@@ -1,0 +1,1 @@
+SELECT a FROM t WHERE NOT (a > 1 AND a < 10)
