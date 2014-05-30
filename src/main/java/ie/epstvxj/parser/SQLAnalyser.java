@@ -316,14 +316,14 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 	}
 
 	@Override
-	public void enterContextually_typed_row_value_expression(
-			@NotNull final SQLGrammarParser.Contextually_typed_row_value_expressionContext ctx) {
+	public void enterExplicit_row_value_constructor(
+			@NotNull final SQLGrammarParser.Explicit_row_value_constructorContext ctx) {
 		sqlConstructStack.push(SQLBuilder.tokens().ignore().withSQLQueryContext(queryContextStack.peek()));
 	}
 
 	@Override
-	public void exitContextually_typed_row_value_expression(
-			@NotNull final SQLGrammarParser.Contextually_typed_row_value_expressionContext ctx) {
+	public void exitExplicit_row_value_constructor(
+			@NotNull final SQLGrammarParser.Explicit_row_value_constructorContext ctx) {
 
 		Stack<SQLConstruct> tempStack = getTempStack();
 

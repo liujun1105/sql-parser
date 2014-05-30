@@ -87,6 +87,7 @@ CURRENT_DATE                : 'CURRENT_DATE'     | 'current_date';
 CURRENT_TIMESTAMP           : 'CURRENT_TIMESTAMP'| 'current_timestamp';
 CURRENT_TIME                : 'CURRENT_TIME'     | 'current_time';
 CURRENT                     : 'CURRENT'          | 'current';
+CORRESPONDING               : 'CORRESPONDING'    | 'corresponding';
 DATE                        : 'DATE'             | 'date';
 DAY                         : 'DAY'              | 'day';
 DELETE                      : 'DELETE'           | 'delete';
@@ -313,6 +314,7 @@ HexPair     : Hexit Hexit;
 fragment
 HexQuad     : Hexit Hexit Hexit Hexit;
 
+fragment
 Unsigned_Integer : (Digit)+;
 
 fragment
@@ -330,7 +332,6 @@ Character_String_Literal : ( Underscore  Character_Set_Name  )?
                            ( Quote ( Extended_Latin_Without_Quotes  )* Quote )*
                          ;
 
-fragment
 Exact_Numeric_Literal               : Unsigned_Integer (Period (Unsigned_Integer))?
                                     | Period Unsigned_Integer
                                     ;
@@ -412,7 +413,7 @@ seconds_integer_value       : Unsigned_Integer;
 seconds_fraction            : Unsigned_Integer;
 datetime_value              : Unsigned_Integer;
 boolean_literal             : TRUE | FALSE | UNKNOWN;
-unsigned_numeric_literal    : Unsigned_Integer;
+unsigned_numeric_literal    : Exact_Numeric_Literal | Approximate_Numeric_Literal;
 signed_numeric_literal      : (sign)? unsigned_numeric_literal;
 unsigned_value_specification: unsigned_literal;
 
@@ -442,33 +443,106 @@ blob_value_expression       : blob_value_expression Concatenation_Operator blob_
 blob_factor                 : blob_primary;
 blob_primary                : value_expression_primary;
 
+/*
+    6.37 <multiset_value_expression> (p286)
+ */
+multiset_value_expression   : multiset_term
+                            | multiset_value_expression MULTISET UNION (ALL | DISTINCT) multiset_term
+                            | multiset_value_expression MULTISET EXCEPT (ALL | DISTINCT) multiset_term
+                            ;
+multiset_term               : multiset_primary
+                            | multiset_term MULTISET INTERSECT (ALL | DISTINCT) multiset_primary;
+multiset_primary            : multiset_value_function | value_expression_primary;
+
+/*
+    6.38 <multiset_value_function> (p289)
+ */
+multiset_value_function     : multiset_set_function;
+multiset_set_function       : SET Left_Paren multiset_value_expression Right_Paren;
+
+/*
+    6.39 <multiset_value_constructor> (p290)
+ */
+contextually_typed_row_value_constructor    : common_value_expression
+                                            | boolean_value_expression
+                                            | contextually_typed_value_specification
+                                            | Left_Paren contextually_typed_row_value_constructor_element Comma
+                                              contextually_typed_row_value_constructor_element_list Right_Paren
+                                            | ROW Left_Paren contextually_typed_row_value_constructor_element_list Right_Paren
+                                            ;
+contextually_typed_row_value_constructor_element_list   : contextually_typed_row_value_constructor_element
+                                                          (Comma contextually_typed_row_value_constructor_element)*;
+contextually_typed_row_value_constructor_element    : value_expression
+                                                    | contextually_typed_value_specification
+                                                    ;
+/*
+    6.5 <contextually_typed_value_specification> (p181)
+ */
+contextually_typed_value_specification  : implicitly_typed_value_specification
+                                        | default_specification
+                                        ;
+implicitly_typed_value_specification    : null_specification
+                                        | empty_specification
+                                        ;
+null_specification     : NULL;
+empty_specification    : ARRAY left_bracket_or_trigraph right_bracket_or_trigraph
+                       | MULTISET left_bracket_or_trigraph right_bracket_or_trigraph
+                       ;
+default_specification  : DEFAULT;
+/*
+    7 Query expressions
+
+    7.1 <row_value_constructor> (p293)
+ */
+
+/*
+    7.2 <row_value_expression> (p296)
+ */
+row_value_special_case  : nonparenthesized_value_expression_primary;
+row_value_constructor   : common_value_expression
+                        | boolean_value_expression
+                        | explicit_row_value_constructor
+                        ;
+contextually_typed_row_value_expression 
+                        : row_value_special_case
+                        | contextually_typed_row_value_constructor
+                        ;
+/*
+    7.3 <table_value_constructor> (p298)
+ */
+table_value_constructor     : VALUES row_value_expression_list;
+row_value_expression_list   : table_row_value_expression (Comma table_row_value_expression)*;
+
+table_row_value_expression  : row_value_special_case
+                            | row_value_constructor
+                            ; 
+contextually_typed_table_value_constructor  : VALUES contextually_typed_row_value_expression_list;
+contextually_typed_row_value_expression_list: contextually_typed_row_value_expression (Comma contextually_typed_row_value_expression)*;
+
 /* ========================================================================= */
 /*                           QUERY EXPRESSION                                */
 /* ========================================================================= */
-query_expression            : (with_clause)? query_expression_body;
-with_clause                 : WITH (RECURSIVE)? with_list;
-with_list                   : with_list_element (Comma with_list_element)*;
-with_list_element           : query_name (Left_Paren with_column_list Right_Paren)?
-                              AS Left_Paren query_expression Right_Paren ;
-with_column_list            : column_name_list;
-query_expression_body       : non_join_query_expression | joined_table;
-non_join_query_expression   : (non_join_query_term
-                            | joined_table (UNION|EXCEPT)? (ALL | DISTINCT)?  query_term)
-                            | (joined_table (UNION|EXCEPT)? (ALL | DISTINCT)? query_term)*
-                            ;
-query_term                  : non_join_query_term | joined_table;
-non_join_query_term         : ( (simple_table | Left_Paren non_join_query_expression Right_Paren)
-                            | joined_table INTERSECT (ALL | DISTINCT)? query_primary
-                              )
-                            | (INTERSECT (ALL | DISTINCT)? query_primary)*
-                            ;
-query_primary               : (simple_table | Left_Paren non_join_query_expression Right_Paren) | joined_table;
+query_expression    : (with_clause)? query_expression_body;
+with_clause         : WITH (RECURSIVE)? with_list;
+with_list           : with_list_element (Comma with_list_element)*;
 
+with_list_element   : query_name (Left_Paren with_column_list Right_Paren)?
+                      AS Left_Paren table_subquery Right_Paren; 
+
+
+with_column_list    : column_name_list;
+
+query_expression_body   : query_term
+                            | query_expression_body UNION (ALL | DISTINCT)? (corresponding_spec)? query_term
+                            | query_expression_body EXCEPT (ALL | DISTINCT)? (corresponding_spec)? query_term
+                            ;
+
+query_term                  : query_primary | query_term INTERSECT (ALL | DISTINCT)? (corresponding_spec)? query_primary;
+query_primary		    : simple_table | Left_Paren query_expression_body Right_Paren ;
 simple_table                : query_specification | table_value_constructor | explicit_table;
 explicit_table              : TABLE table_or_query_name;
-
-table_value_constructor     : VALUES (nonparenthesized_value_expression_primary (Comma nonparenthesized_value_expression_primary)*);
-
+corresponding_spec          : CORRESPONDING (BY Left_Paren corresponding_column_list Right_Paren)?;
+corresponding_column_list   : column_name_list;
 
 /* ========================================================================= */
 /*                           QUERY SPECIFICATION                             */
@@ -497,22 +571,7 @@ subquery        : Left_Paren query_expression Right_Paren;
 /* ========================================================================= */
 /*                           PREDICATE                                       */
 /* ========================================================================= */
-/*
-    6.37 <multiset_value_expression> (p286)
- */
-multiset_value_expression   : multiset_term
-                            | multiset_value_expression MULTISET UNION (ALL | DISTINCT) multiset_term
-                            | multiset_value_expression MULTISET EXCEPT (ALL | DISTINCT) multiset_term
-                            ;
-multiset_term               : multiset_primary
-                            | multiset_term MULTISET INTERSECT (ALL | DISTINCT) multiset_primary;
-multiset_primary            : multiset_value_function | value_expression_primary;
 
-/*
-    6.38 <multiset_value_function> (p289)
- */
-multiset_value_function     : multiset_set_function;
-multiset_set_function       : SET Left_Paren multiset_value_expression Right_Paren;
 
 /*
     8 Predicates
@@ -789,6 +848,7 @@ numeric_value_expression
 term            : factor ( ( Asterisk | Slash ) factor )*;
 factor          : (sign)? value_expression_primary;
 
+
 /* --------------------------------------------------------------------------- */
 string_value_expression     : character_value_expression | blob_value_expression;
 character_value_expression  : character_value_expression Concatenation_Operator 
@@ -859,7 +919,7 @@ interval_value_function             : interval_absolute_value_function;
 interval_absolute_value_function    : ABS Left_Paren interval_value_expression Right_Paren;
 
 /* --------------------------------------------------------------------------- */
-row_value_expression            : nonparenthesized_value_expression_primary
+row_value_expression            : row_value_special_case
                                 | explicit_row_value_constructor
                                 ;
 explicit_row_value_constructor  : Left_Paren row_value_constructor_element Comma row_value_constructor_element_list Right_Paren
@@ -978,18 +1038,12 @@ insert_columns_and_source   : from_subquery
 from_subquery       : (Left_Paren insert_column_list Right_Paren)? (override_clause)?
                       query_expression;
 from_constructor    : (Left_Paren insert_column_list Right_Paren)? (override_clause)?
-                      VALUES contextually_typed_row_value_expression (Comma contextually_typed_row_value_expression)*;
+                      contextually_typed_table_value_constructor
+                    ;
 override_clause     : OVERRIDING USER VALUE | OVERRIDING SYSTEM VALUE;
 from_default        : DEFAULT VALUES;
 insert_column_list  : column_name_list;
-contextually_typed_row_value_expression 
-                    : nonparenthesized_value_expression_primary
-                    | common_value_expression
-                    | boolean_value_expression
-                    | (null_specification | empty_specification | default_specification)
-                    | Left_Paren row_value Comma row_value (Comma row_value)* Right_Paren
-                    | ROW Left_Paren row_value (Comma row_value)* Right_Paren
-                    ;
+
 
 /*
     14.11 <update_statement_searched> (p847)
@@ -1010,21 +1064,12 @@ update_target          : column_name
                        | column_name left_bracket_or_trigraph ( literal | basic_identifier_chain) right_bracket_or_trigraph;
 mutated_set_clause     : mutated_target Period method_name;
 mutated_target         : column_name (Period column_name)*;
-assigned_row           : nonparenthesized_value_expression_primary
-                       | common_value_expression
-                       | boolean_value_expression
-                       | (null_specification | empty_specification | default_specification)
-                       | Left_Paren row_value Comma row_value (Comma row_value)* Right_Paren
-                       | ROW Left_Paren row_value (Comma row_value)* Right_Paren
+assigned_row           : contextually_typed_row_value_expression
                        ;
 row_value              : (value_expression | null_specification | empty_specification | default_specification);
 set_target_list        : Left_Paren set_target (Comma set_target)* Right_Paren;
 update_source          : value_expression | null_specification | empty_specification | default_specification;                      
-null_specification     : NULL;
-empty_specification    : ARRAY left_bracket_or_trigraph right_bracket_or_trigraph
-                       | MULTISET left_bracket_or_trigraph right_bracket_or_trigraph
-                       ;
-default_specification  : DEFAULT;
+
 
 /* for parameterized query */
 dynamic_parameter_specification : Question_Mark;

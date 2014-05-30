@@ -1,0 +1,1 @@
+INSERT INTO t (c1, c2) VALUES ('C1', -16.0)
