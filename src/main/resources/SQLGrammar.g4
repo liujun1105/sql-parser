@@ -1,5 +1,8 @@
 grammar SQLGrammar;
 
+tokens {
+Unsigned_Integer
+}
 /*
  * KEYWORDS have to be either all uppercases or all lowercases
  * Update to support mixture of uppercases and lowercases 
@@ -201,6 +204,10 @@ VAR_POP                     : 'VAR_POP'           | 'var_pop';
 VAR_SAMP                    : 'VAR_SAMP'          | 'var_samp';
 ZONE                        : 'ZONE'              | 'zone';
 
+// sql dialect
+LIMIT                       : 'LIMIT'             | 'limit';
+OFFSET                      : 'OFFSET'            | 'offset';
+
 // Unicode Character Ranges
 fragment
 Unicode_Character_Without_Quotes    : Basic_Latin_Without_Quotes
@@ -316,7 +323,6 @@ HexPair     : Hexit Hexit;
 
 fragment
 HexQuad     : Hexit Hexit Hexit Hexit;
-
 fragment
 Unsigned_Integer : (Digit)+;
 
@@ -353,6 +359,10 @@ Sql_Language_Identifier_Part        : Simple_Latin_Letter | Digit;
  */
 Non_Escaped_Character       : Regex_Non_Escaped_Unicode    /*!! See the Syntax Rules*/;
 Escaped_Character           : Regex_Escaped_Unicode        /*!! See the Syntax Rules*/;
+
+
+
+
 
 /* ======================================================================== */
 /*                        START_RULE                                        */
@@ -418,7 +428,15 @@ datetime_value              : Unsigned_Integer;
 boolean_literal             : TRUE | FALSE | UNKNOWN;
 unsigned_numeric_literal    : Exact_Numeric_Literal | Approximate_Numeric_Literal;
 signed_numeric_literal      : (sign)? unsigned_numeric_literal;
-unsigned_value_specification: unsigned_literal;
+
+/*
+    6.4 <value_specification> and <target_specification> (p176)
+ */
+value_specification             : literal | general_value_specification;
+unsigned_value_specification    : unsigned_literal | general_value_specification;
+general_value_specification     : sql_parameter_reference
+                                | dynamic_parameter_specification
+                                ;                                
 
 identifier                      : Regular_Identifier | Delimited_Identifier;
 table_name                      : basic_identifier_chain;
@@ -438,6 +456,11 @@ schema_qualified_type_name      : (schema_name Period)? qualified_identifier;
 cursor_name                     : local_qualified_name;
 local_qualified_name            : (local_qualifier Period)? qualified_identifier;
 local_qualifier                 : MODULE;
+
+/*
+    6.8 <SQL_parameter_reference> (p190)
+ */
+sql_parameter_reference     : basic_identifier_chain;
 
 /*
     6.28 <string_value_expression> (p251)
@@ -550,7 +573,7 @@ corresponding_column_list   : column_name_list;
 /* ========================================================================= */
 /*                           QUERY SPECIFICATION                             */
 /* ========================================================================= */
-query_specification         : SELECT (set_quantifier)? select_list table_expression ; 
+query_specification         : SELECT (set_quantifier)? select_list table_expression result_limit?; 
 select_list                 : Asterisk                               
                             | select_sublist (Comma select_sublist)* 
                             ;
@@ -563,6 +586,14 @@ as_clause                   : (AS)? column_name;
 all_fields_reference        : value_expression_primary Period Asterisk
                               (AS Left_Paren column_name_list Right_Paren)?
                             ;
+result_limit                : LIMIT 
+                              ((offset Comma)? row_count)
+                              | (row_count OFFSET offset)
+                            ;
+// sql dialect
+offset    : unsigned_numeric_literal;
+row_count : unsigned_numeric_literal;
+
 /* ========================================================================= */
 /*                           SUBQUERY                                        */
 /* ========================================================================= */
@@ -922,6 +953,11 @@ interval_value_function             : interval_absolute_value_function;
 interval_absolute_value_function    : ABS Left_Paren interval_value_expression Right_Paren;
 
 /* --------------------------------------------------------------------------- */
+row_value_constructor_predicand : common_value_expression
+                                | boolean_predicand
+                                | explicit_row_value_constructor
+                                ;
+
 row_value_expression            : row_value_special_case
                                 | explicit_row_value_constructor
                                 ;
@@ -931,17 +967,9 @@ explicit_row_value_constructor  : Left_Paren row_value_constructor_element Comma
 row_value_constructor_element_list  : row_value_constructor_element (Comma row_value_constructor_element)*;
 row_value_constructor_element       : value_expression;
 
-row_value_predicand             : value_expression_primary
-                                | numeric_value_expression
-                                | string_value_expression
-                                | datetime_value_expression
-                                | interval_value_expression                            
-                                | array_value_expression
-                                | Left_Paren boolean_value_expression Right_Paren
-                                | Left_Paren value_expression Comma value_expression (Comma value_expression)* Right_Paren
-                                | ROW Left_Paren value_expression (Comma value_expression)* Right_Paren
-                                | row_subquery
-                                ;
+row_value_predicand : row_value_special_case
+                    | row_value_constructor_predicand
+                    ;
 
 /* --------------------------------------------------------------------------- */
 boolean_value_expression    : boolean_term (OR boolean_term)*;
@@ -1013,7 +1041,7 @@ null_ordering                   : NULLS FIRST | NULLS LAST;
 
 dereference_operator            : Right_Arrow;
 
-select_statement_single_row     : SELECT (set_quantifier)? select_list INTO select_target_list table_expression;
+select_statement_single_row     : SELECT (set_quantifier)? select_list INTO select_target_list table_expression result_limit?;
 select_target_list              : basic_identifier_chain (Comma basic_identifier_chain)*;
 
 /*
