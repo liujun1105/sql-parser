@@ -54,13 +54,16 @@ Underscore                      : '_';
 Vertical_Bar                    : '|';
 Left_Brace                      : '{';
 Right_Brace                     : '}';
+Exclamatory_Mark                : '!';
 Double_Colon                    : Colon Colon;
 Double_Period                   : Period Period;
 Right_Arrow                     : Minus_Sign Greater_Than_Operator;
 Concatenation_Operator          : Vertical_Bar Vertical_Bar;
 Less_Than_Or_Equals_Operator    : Less_Than_Operator Equals_Operator;
 Greater_Than_Or_Equals_Operator : Greater_Than_Operator Equals_Operator;
-Not_Equals_Operator             : Less_Than_Operator Greater_Than_Operator;
+Not_Equals_Operator             : Less_Than_Operator Greater_Than_Operator
+                                | Exclamatory_Mark Equals_Operator // This is not part of ANSI SQL Standard
+                                ;
 /*
 The rule for <doublequote symbol> in the standard uses two adjacent literal
 double quotes rather than referencing <double quote>; the reasons are not clear.
