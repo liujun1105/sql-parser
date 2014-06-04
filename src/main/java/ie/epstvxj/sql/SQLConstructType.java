@@ -13,7 +13,7 @@ package ie.epstvxj.sql;
 public enum SQLConstructType {
 
 	//@formatter:off
-	UNKNOWN,
+	UNKNOWN, UNION,
 	
 	SELECT,
 	SUBSELECT, 

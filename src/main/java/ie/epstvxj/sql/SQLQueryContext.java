@@ -12,6 +12,6 @@ package ie.epstvxj.sql;
  */
 public enum SQLQueryContext {
 
-	SELECT, DELETE, INSERT, UPDATE, NESTED_SELECT, UNKNWON;
+	SELECT, DELETE, INSERT, UPDATE, NESTED_SELECT, TOP_UNION, UNKNWON;
 
 }

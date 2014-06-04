@@ -29,13 +29,13 @@ public class SQLNotFunction extends SQLFunction {
 	}
 
 	public SQLNotFunction withOperand(final SQLConstruct operand) {
-		this.operandIndex = this.getRSCRepository().addRSC(operand);
-		operand.setReferencingRSC(this);
+		this.operandIndex = this.getRepository().addSQLConstruct(operand);
+		operand.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLConstruct getOperand() {
-		return this.getRSCRepository().getRSC(operandIndex);
+		return this.getRepository().getSQLConstruct(operandIndex);
 	}
 
 	@Override

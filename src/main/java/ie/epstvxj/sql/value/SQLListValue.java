@@ -38,8 +38,8 @@ public class SQLListValue extends SQLValue {
 	}
 
 	public SQLListValue withValue(final SQLConstruct value) {
-		this.valueIndexList.add(this.getRSCRepository().addRSC(value));
-		value.setReferencingRSC(this);
+		this.valueIndexList.add(this.getRepository().addSQLConstruct(value));
+		value.setReferencingConstruct(this);
 		return this;
 	}
 
@@ -58,7 +58,7 @@ public class SQLListValue extends SQLValue {
 			int size = size();
 			sql.append(SQLGrammarTokens.LEFT_PAREN);
 			for (int i = 0; i < size; i++) {
-				SQLConstruct value = this.getRSCRepository().getRSC(valueIndexList.get(i));
+				SQLConstruct value = this.getRepository().getSQLConstruct(valueIndexList.get(i));
 				sql.append(value.toSql());
 
 				if (i + 1 != size) {
@@ -75,7 +75,7 @@ public class SQLListValue extends SQLValue {
 	public List<SQLConstruct> getValue() {
 		List<SQLConstruct> list = new ArrayList<SQLConstruct>();
 		for (Integer valueIndex : valueIndexList) {
-			SQLConstruct value = this.getRSCRepository().getRSC(valueIndex);
+			SQLConstruct value = this.getRepository().getSQLConstruct(valueIndex);
 			list.add(value);
 		}
 		return list;
@@ -104,7 +104,7 @@ public class SQLListValue extends SQLValue {
 		int index = 0;
 
 		for (Integer valueIndex : valueIndexList) {
-			SQLConstruct value = this.getRSCRepository().getRSC(valueIndex);
+			SQLConstruct value = this.getRepository().getSQLConstruct(valueIndex);
 			array[index++] = (SQLValue) value;
 		}
 
@@ -116,7 +116,7 @@ public class SQLListValue extends SQLValue {
 
 		int index = 0;
 		for (Integer valueIndex : valueIndexList) {
-			SQLConstruct value = this.getRSCRepository().getRSC(valueIndex);
+			SQLConstruct value = this.getRepository().getSQLConstruct(valueIndex);
 			array[index++] = (SQLColumn) value;
 		}
 
@@ -129,7 +129,7 @@ public class SQLListValue extends SQLValue {
 				.withSQLQueryContext(this.sqlQueryContext);
 
 		for (Integer valueIndex : valueIndexList) {
-			SQLConstruct value = this.getRSCRepository().getRSC(valueIndex);
+			SQLConstruct value = this.getRepository().getSQLConstruct(valueIndex);
 			clone.withValue(value.deepClone());
 		}
 
@@ -142,7 +142,7 @@ public class SQLListValue extends SQLValue {
 				this.sqlQueryContext);
 
 		for (Integer valueIndex : valueIndexList) {
-			SQLConstruct value = this.getRSCRepository().getRSC(valueIndex);
+			SQLConstruct value = this.getRepository().getSQLConstruct(valueIndex);
 			clone.withValue(value.deepCloneWithPreservedIdentifier());
 		}
 

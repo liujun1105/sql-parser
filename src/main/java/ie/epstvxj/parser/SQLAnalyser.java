@@ -20,9 +20,9 @@ import ie.epstvxj.sql.SQLOrderBy;
 import ie.epstvxj.sql.SQLQueryContext;
 import ie.epstvxj.sql.SQLSearchConditions;
 import ie.epstvxj.sql.SQLSelect;
-import ie.epstvxj.sql.SQLSubSelect;
 import ie.epstvxj.sql.SQLTable;
 import ie.epstvxj.sql.SQLTargetResource;
+import ie.epstvxj.sql.SQLUnion;
 import ie.epstvxj.sql.SQLUpdate;
 import ie.epstvxj.sql.SQLWhere;
 import ie.epstvxj.sql.function.SQLAssignmentFunction;
@@ -58,24 +58,25 @@ import org.apache.log4j.Logger;
 
 public class SQLAnalyser extends SQLGrammarBaseListener {
 
-	private static Logger					LOG								= Logger.getLogger(SQLAnalyser.class);
+	private static Logger					LOG							= Logger.getLogger(SQLAnalyser.class);
+	private static final boolean			isTraceEnabled				= LOG.isTraceEnabled();
 
-	private final Stack<SQLConstruct>		sqlConstructStack				= new Stack<SQLConstruct>();
+	private final Stack<SQLConstruct>		sqlConstructStack			= new Stack<SQLConstruct>();
 	private SQLConstruct					sql;
 
-	private boolean							ignoreIdentifierChain			= false;
-	private boolean							ignoreColumnName				= false;
-	private boolean							withinParenthesis				= false;
-	private boolean							withinGeneralSetFunction		= false;
-	private boolean							withInFromSubquery				= false;
-
-	private int								ignoreQuerySpecificationCount	= 0;
+	private boolean							ignoreIdentifierChain		= false;
+	private boolean							ignoreColumnName			= false;
+	private boolean							withinParenthesis			= false;
+	private boolean							withinGeneralSetFunction	= false;
+	private boolean							withInFromSubquery			= false;
 
 	private boolean							withinInsertStatement;
 	private boolean							withinUpdateStatement;
 	private boolean							withinDeleteStatement;
 
-	private final Stack<SQLQueryContext>	queryContextStack				= new Stack<SQLQueryContext>();
+	private final Stack<SQLQueryContext>	queryContextStack			= new Stack<SQLQueryContext>();
+
+	private boolean							withinSubquery;
 
 	/**
 	 * Used to reset all variables,
@@ -88,11 +89,10 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 		withinGeneralSetFunction = false;
 		withInFromSubquery = false;
 
-		ignoreQuerySpecificationCount = 0;
-
 		withinInsertStatement = false;
 		withinUpdateStatement = false;
 		withinDeleteStatement = false;
+
 		sqlConstructStack.clear();
 		queryContextStack.clear();
 		sql = null;
@@ -104,116 +104,149 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 	}
 
 	@Override
+	public void exitSqlParser(@NotNull final SQLGrammarParser.SqlParserContext ctx) {
+		this.sql = sqlConstructStack.pop();
+	}
+
+	@Override
 	public void enterQuery_specification(@NotNull final SQLGrammarParser.Query_specificationContext ctx) {
-		if (withInFromSubquery) {
-			sqlConstructStack.push(SQLBuilder.tokens().ignore().withSQLQueryContext(queryContextStack.peek()));
+		LOG.trace(">>>> enterQuery_specification");
+		if (withinSubquery || withinInsertStatement || withinUpdateStatement || withinDeleteStatement) {
+			queryContextStack.push(SQLQueryContext.NESTED_SELECT);
+		} else {
+			queryContextStack.push(SQLQueryContext.SELECT);
 		}
-		if (ignoreQuerySpecificationCount == 0) {
-			if (withinInsertStatement || withinUpdateStatement || withinDeleteStatement) {
-				queryContextStack.push(SQLQueryContext.NESTED_SELECT);
-			} else {
-				queryContextStack.push(SQLQueryContext.SELECT);
-			}
-		}
+
 	}
 
 	@Override
 	public void exitQuery_specification(@NotNull final SQLGrammarParser.Query_specificationContext ctx) {
+		LOG.trace(">>>> exitQuery_specification");
+		SQLSelect select = null;
 
-		if (ignoreQuerySpecificationCount == 0) {
-			SQLSelect select = SQLBuilder.build().select().withSQLQueryContext(queryContextStack.peek());
+		if (!withInFromSubquery && !withinSubquery && queryContextStack.peek() == SQLQueryContext.SELECT) {
+			select = SQLBuilder.build().select().withSQLQueryContext(queryContextStack.peek());
+		} else {
+			select = SQLBuilder.build().subSelect().withSQLQueryContext(queryContextStack.peek());
+		}
+		/*
+		 * We need maintain the order of selected element, therefore, we use a temp list to store them
+		 */
+		Stack<SQLConstruct> tempStack = new Stack<SQLConstruct>();
 
-			/*
-			 * We need maintain the order of selected element, therefore, we use a temp list to store them
-			 */
-			Stack<SQLConstruct> tempStack = new Stack<SQLConstruct>();
+		SQLConstruct temp = null;
 
-			SQLConstruct temp = null;
-			while (!sqlConstructStack.isEmpty()) {
-				temp = sqlConstructStack.pop();
-				if (temp.getActualType() == SQLConstructType.WHERE) {
-					select.withWhereClause((SQLWhere) temp);
-				} else if (temp.getActualType() == SQLConstructType.FROM) {
-					select.withFromClause((SQLFrom) temp);
-				} else if (temp.getActualType() == SQLConstructType.HAVING) {
-					select.withHavingClause((SQLHaving) temp);
-				} else if (temp.getActualType() == SQLConstructType.ORDER_BY) {
-					select.withOrderByClause((SQLOrderBy) temp);
-				} else if (temp.getActualType() == SQLConstructType.GROUP_BY) {
-					select.withGroupBy((SQLGroupBy) temp);
-				} else if (temp.getActualType() == SQLConstructType.ASTERISK) {
-					select.withSelectedItem(temp);
-				} else if (temp.getActualType() == SQLConstructType.IGNORE_TOKEN) {
-					break;
-				} else {
-					tempStack.push(temp);
-				}
+		while (!sqlConstructStack.isEmpty()) {
+			temp = sqlConstructStack.pop();
+			LOG.trace(String.format("TYPE: %s; QUERY: %s", temp.getActualType(), temp.toSql()));
+			if (temp.getActualType() == SQLConstructType.WHERE) {
+				select.withWhereClause((SQLWhere) temp);
+			} else if (temp.getActualType() == SQLConstructType.FROM) {
+				select.withFromClause((SQLFrom) temp);
+			} else if (temp.getActualType() == SQLConstructType.HAVING) {
+				select.withHavingClause((SQLHaving) temp);
+			} else if (temp.getActualType() == SQLConstructType.ORDER_BY) {
+				select.withOrderByClause((SQLOrderBy) temp);
+			} else if (temp.getActualType() == SQLConstructType.GROUP_BY) {
+				select.withGroupBy((SQLGroupBy) temp);
+			} else if (temp.getActualType() == SQLConstructType.ASTERISK) {
+				select.withSelectedItem(temp);
+			} else if (temp.getActualType() == SQLConstructType.IGNORE_TOKEN) {
+				LOG.trace(String.format("IGNORE TOKEN encountered"));
+				break;
+			} else if (temp.getActualType() == SQLConstructType.SUBSELECT
+					|| temp.getActualType() == SQLConstructType.SELECT) {
+				sqlConstructStack.push(temp);
+				break;
+			} else {
+				tempStack.push(temp);
 			}
+		}
 
-			if (null != ctx.set_quantifier()) {
-				if (null != ctx.set_quantifier().ALL()) {
-					select.selectAll();
-				} else {
-					select.selectDistinct();
-				}
+		if (null != ctx.set_quantifier()) {
+			if (null != ctx.set_quantifier().ALL()) {
+				select.selectAll();
+			} else {
+				select.selectDistinct();
 			}
+		}
 
-			while (!tempStack.isEmpty()) {
+		while (!tempStack.isEmpty()) {
+			if (tempStack.peek().getActualType() == SQLConstructType.SELECT
+					|| tempStack.peek().getActualType() == SQLConstructType.SUBSELECT
+					|| tempStack.peek().getGeneralType() == SQLConstructType.UNION) {
+				if (isTraceEnabled) {
+					LOG.trace(String.format("Add %s[%s] back to sql construct stack;", tempStack.peek(), tempStack
+							.peek().toSql()));
+				}
+				sqlConstructStack.push(tempStack.pop());
+			} else {
+				if (isTraceEnabled) {
+					LOG.trace(String.format("Add selected item: %s, %s;", tempStack.peek(), tempStack.peek().toSql()));
+				}
 				select.withSelectedItem(tempStack.pop());
 			}
+		}
 
-			if (temp.getActualType() == SQLConstructType.IGNORE_TOKEN) {
-				sqlConstructStack.push(select);
+		LOG.trace(String.format("Add select %s [%s] to sql construct stack in query context [%s];", select,
+				select.toSql(), select.getSQLQueryContext()));
+		sqlConstructStack.push(select);
+
+		LOG.trace(String.format("sql construct stack %s", sqlConstructStack));
+		queryContextStack.pop();
+	}
+
+	@Override
+	public void enterQuery_expression_body(@NotNull final SQLGrammarParser.Query_expression_bodyContext ctx) {
+		LOG.trace(">>>> enterQuery_expression_body");
+		if (sqlConstructStack.isEmpty() || sqlConstructStack.peek().getActualType() != SQLConstructType.IGNORE_TOKEN) {
+			sqlConstructStack.push(SQLBuilder.tokens().ignore());
+		}
+	}
+
+	@Override
+	public void exitQuery_expression_body(@NotNull final SQLGrammarParser.Query_expression_bodyContext ctx) {
+		LOG.trace(">>>> exitQuery_expression_body");
+
+		if (null != ctx.UNION()) {
+			LOG.trace(">>>> has UNION()");
+			SQLUnion union = SQLBuilder.build().union();
+
+			if (!queryContextStack.isEmpty()) {
+				union.withSQLQueryContext(queryContextStack.peek());
 			} else {
-				sql = select;
+				union.withSQLQueryContext(SQLQueryContext.TOP_UNION);
+			}
+			SQLConstruct right = sqlConstructStack.pop();
+			while (right.getActualType() == SQLConstructType.IGNORE_TOKEN) {
+				right = sqlConstructStack.pop();
+			}
+			SQLConstruct left = sqlConstructStack.pop();
+			while (left.getActualType() == SQLConstructType.IGNORE_TOKEN) {
+				left = sqlConstructStack.pop();
 			}
 
-			queryContextStack.pop();
+			union.unionConstructs(left, right);
+
+			if (isTraceEnabled) {
+				LOG.trace(String.format("Left: %s, %s", left.toSql(), left.getSQLQueryContext()));
+				LOG.trace(String.format("Right: %s, %s", right.toSql(), right.getSQLQueryContext()));
+				LOG.trace(String.format("Union: %s, %s", union.toSql(), union.getSQLQueryContext()));
+			}
+
+			sqlConstructStack.push(union);
 		}
 
 	}
 
 	@Override
 	public void enterSubquery(@NotNull final SQLGrammarParser.SubqueryContext ctx) {
-		sqlConstructStack.push(SQLBuilder.build().subSelect().withSQLQueryContext(SQLQueryContext.NESTED_SELECT));
-		queryContextStack.push(SQLQueryContext.NESTED_SELECT);
-		ignoreQuerySpecificationCount++;
+		withinSubquery = true;
 	}
 
 	@Override
 	public void exitSubquery(@NotNull final SQLGrammarParser.SubqueryContext ctx) {
-		SQLConstruct temp = null;
-
-		Stack<SQLConstruct> tempStack = new Stack<SQLConstruct>();
-		while (!((temp = sqlConstructStack.pop()).getActualType() == SQLConstructType.SUBSELECT)) {
-			tempStack.push(temp);
-		}
-
-		SQLSubSelect subSelect = (SQLSubSelect) temp;
-
-		while (!tempStack.isEmpty()) {
-			SQLConstruct sqlConstruct = tempStack.pop();
-			if (sqlConstruct.getActualType() == SQLConstructType.WHERE) {
-				subSelect.withWhereClause((SQLWhere) sqlConstruct);
-			} else if (sqlConstruct.getActualType() == SQLConstructType.FROM) {
-				subSelect.withFromClause((SQLFrom) sqlConstruct);
-			} else if (sqlConstruct.getActualType() == SQLConstructType.HAVING) {
-				subSelect.withHavingClause((SQLHaving) sqlConstruct);
-			} else if (sqlConstruct.getActualType() == SQLConstructType.ORDER_BY) {
-				subSelect.withOrderByClause((SQLOrderBy) sqlConstruct);
-			} else if (sqlConstruct.getActualType() == SQLConstructType.GROUP_BY) {
-				subSelect.withGroupBy((SQLGroupBy) sqlConstruct);
-			} else {
-				subSelect.withSelectedItem(sqlConstruct);
-			}
-		}
-
-		sqlConstructStack.push(subSelect);
-
-		ignoreQuerySpecificationCount--;
-
-		queryContextStack.pop();
-
+		withinSubquery = false;
 	}
 
 	@Override
@@ -239,7 +272,7 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 			}
 		}
 
-		sql = update;
+		sqlConstructStack.push(update);
 
 		queryContextStack.pop();
 		this.withinUpdateStatement = false;
@@ -271,7 +304,7 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 		SQLInsert insert = SQLBuilder.build().insert().withSQLQueryContext(queryContextStack.peek());
 
 		// embedded query
-		if (sqlConstructStack.peek().getActualType() == SQLConstructType.SELECT) {
+		if (sqlConstructStack.peek().getActualType() == SQLConstructType.SUBSELECT) {
 			insert.withEmbeddedQuery(sqlConstructStack.pop());
 		}
 
@@ -279,6 +312,11 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 
 		//handle both values and NULL Token
 		while (sqlConstructStack.peek().getGeneralType() == SQLConstructType.VALUE) {
+			LOG.trace(String.format("Insert Value Type %s", sqlConstructStack.peek().getActualType()));
+			if (sqlConstructStack.peek().getActualType() == SQLConstructType.IGNORE_TOKEN) {
+				sqlConstructStack.pop();
+				break;
+			}
 			tempStack.push(sqlConstructStack.pop());
 		}
 
@@ -291,6 +329,10 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 			else {
 				insert.withValue((SQLValue) tempStack.pop());
 			}
+		}
+
+		while (sqlConstructStack.peek().getActualType() == SQLConstructType.IGNORE_TOKEN) {
+			sqlConstructStack.pop();
 		}
 
 		while (sqlConstructStack.peek().getGeneralType() == SQLConstructType.COLUMN) {
@@ -309,7 +351,7 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 			}
 		}
 
-		sql = insert;
+		sqlConstructStack.push(insert);
 
 		queryContextStack.pop();
 		this.withinInsertStatement = false;
@@ -357,7 +399,7 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 			}
 		}
 
-		sql = delete;
+		sqlConstructStack.push(delete);
 
 		queryContextStack.pop();
 		this.withinDeleteStatement = false;
@@ -515,11 +557,13 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 
 	@Override
 	public void enterJoined_table(@NotNull final SQLGrammarParser.Joined_tableContext ctx) {
+		LOG.trace(">>>> enterJoined_table");
 		sqlConstructStack.push(SQLBuilder.tokens().ignore().withSQLQueryContext(queryContextStack.peek()));
 	}
 
 	@Override
 	public void exitJoined_table(@NotNull final SQLGrammarParser.Joined_tableContext ctx) {
+		LOG.trace(">>>> exitJoined_table");
 
 		int childCount = ctx.getChildCount();
 
@@ -563,7 +607,16 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 
 		}
 
-		Stack<SQLConstruct> tempStack = getTempStack();
+		Stack<SQLConstruct> tempStack = new Stack<SQLConstruct>();
+
+		while ((sqlConstructStack.peek().getGeneralType() == SQLConstructType.TARGET_RESOURCE || sqlConstructStack
+				.peek().getActualType() == SQLConstructType.SEARCH_COND)
+				&& sqlConstructStack.peek().getActualType() != SQLConstructType.IGNORE_TOKEN) {
+			tempStack.push(sqlConstructStack.pop());
+		}
+		if (sqlConstructStack.peek().getActualType() == SQLConstructType.IGNORE_TOKEN) {
+			sqlConstructStack.pop();
+		}
 
 		SQLTargetResource targetResource = (SQLTargetResource) tempStack.pop();
 		SQLTargetResource front = targetResource;
@@ -964,6 +1017,7 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 
 	@Override
 	public void exitIn_predicate(@NotNull final SQLGrammarParser.In_predicateContext ctx) {
+
 		SQLConstruct operand2 = sqlConstructStack.pop();
 		SQLConstruct operand1 = sqlConstructStack.pop();
 		SQLInFunction inFunction = (SQLInFunction) sqlConstructStack.peek();

@@ -22,8 +22,8 @@ public class SQLSubSelect extends SQLSelect implements SQLTargetResource {
 	}
 
 	public SQLSubSelect as(final SQLCorrelationName alias) {
-		this.aliasIndex = this.getRSCRepository().addRSC(alias);
-		alias.setReferencingRSC(this);
+		this.aliasIndex = this.getRepository().addSQLConstruct(alias);
+		alias.setReferencingConstruct(this);
 		return this;
 	}
 
@@ -70,7 +70,7 @@ public class SQLSubSelect extends SQLSelect implements SQLTargetResource {
 	}
 
 	public SQLCorrelationName getAlias() {
-		return (SQLCorrelationName) this.getRSCRepository().getRSC(aliasIndex);
+		return (SQLCorrelationName) this.getRepository().getSQLConstruct(aliasIndex);
 	}
 
 	@Override
@@ -107,8 +107,8 @@ public class SQLSubSelect extends SQLSelect implements SQLTargetResource {
 
 	@Override
 	public SQLSubSelect withJoin(final SQLJoin join) {
-		this.joinIndexList.add(this.getRSCRepository().addRSC(join));
-		join.setReferencingRSC(this);
+		this.joinIndexList.add(this.getRepository().addSQLConstruct(join));
+		join.setReferencingConstruct(this);
 		return this;
 	}
 
@@ -135,7 +135,7 @@ public class SQLSubSelect extends SQLSelect implements SQLTargetResource {
 	public List<SQLJoin> getJoins() {
 		List<SQLJoin> joinList = new ArrayList<SQLJoin>();
 		for (Integer joinIndex : joinIndexList) {
-			joinList.add((SQLJoin) this.getRSCRepository().getRSC(joinIndex));
+			joinList.add((SQLJoin) this.getRepository().getSQLConstruct(joinIndex));
 		}
 		return joinList;
 	}

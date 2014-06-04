@@ -27,16 +27,16 @@ public class SQLColumn extends AbstractSQLConstruct {
 
 	public SQLColumn withCorrelationName(final SQLCorrelationName tableCorrelationName) {
 		if (null != tableCorrelationName) {
-			tableCorrelationNameIndex = this.getRSCRepository().addRSC(tableCorrelationName);
-			tableCorrelationName.setReferencingRSC(this);
+			tableCorrelationNameIndex = this.getRepository().addSQLConstruct(tableCorrelationName);
+			tableCorrelationName.setReferencingConstruct(this);
 		}
 		return this;
 	}
 
 	public SQLColumn withAlias(final SQLCorrelationName columnAlias) {
 		if (null != columnAlias) {
-			this.columnAliasIndex = this.getRSCRepository().addRSC(columnAlias);
-			columnAlias.setReferencingRSC(this);
+			this.columnAliasIndex = this.getRepository().addSQLConstruct(columnAlias);
+			columnAlias.setReferencingConstruct(this);
 		}
 		return this;
 	}
@@ -63,14 +63,14 @@ public class SQLColumn extends AbstractSQLConstruct {
 		StringBuilder sql = new StringBuilder();
 
 		if (-1 != tableCorrelationNameIndex) {
-			sql.append(this.getRSCRepository().getRSC(tableCorrelationNameIndex).toSql()).append(SQLGrammarTokens.DOT);
+			sql.append(this.getRepository().getSQLConstruct(tableCorrelationNameIndex).toSql()).append(SQLGrammarTokens.DOT);
 		}
 
 		sql.append(columnName);
 
 		if (-1 != columnAliasIndex) {
 			sql.append(SQLGrammarTokens.SPACE).append(SQLGrammarTokens.AS).append(SQLGrammarTokens.SPACE)
-					.append(this.getRSCRepository().getRSC(columnAliasIndex).toSql());
+					.append(this.getRepository().getSQLConstruct(columnAliasIndex).toSql());
 		}
 
 		return sql.toString();
@@ -81,11 +81,11 @@ public class SQLColumn extends AbstractSQLConstruct {
 	}
 
 	public SQLCorrelationName getTableCorrelationName() {
-		return (SQLCorrelationName) getRSCRepository().getRSC(tableCorrelationNameIndex);
+		return (SQLCorrelationName) getRepository().getSQLConstruct(tableCorrelationNameIndex);
 	}
 
 	public SQLCorrelationName getColumnAlias() {
-		return (SQLCorrelationName) getRSCRepository().getRSC(columnAliasIndex);
+		return (SQLCorrelationName) getRepository().getSQLConstruct(columnAliasIndex);
 	}
 
 	@Override

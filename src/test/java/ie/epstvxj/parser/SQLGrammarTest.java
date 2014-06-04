@@ -6,6 +6,8 @@
  */
 package ie.epstvxj.parser;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -17,6 +19,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -61,6 +64,9 @@ public class SQLGrammarTest extends TestBase {
 	public void checkAndVerify() {
 
 		for (Entry<String, File> entry : inputFileMap.entrySet()) {
+
+			LOG.info(String.format("start processing query [%s]", entry.getValue().getName()));
+
 			String query = getQuery(entry.getValue());
 			if (null == query) {
 				fail(String.format("no query in the input file [%s]", entry.getValue()));
@@ -85,6 +91,16 @@ public class SQLGrammarTest extends TestBase {
 			}
 
 		}
+	}
+
+	@Test
+	@Ignore
+	public void test() {
+
+		String query = "INSERT INTO T (a, b) SELECT a, b FROM F";
+		processQuery(query);
+		String actual = sqlAnalyser.getSQLConstruct().toSql();
+		assertThat(actual, is(query));
 	}
 
 }

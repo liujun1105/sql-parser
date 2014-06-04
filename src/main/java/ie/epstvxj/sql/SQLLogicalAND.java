@@ -24,15 +24,15 @@ public class SQLLogicalAND extends SQLFunction {
 	}
 
 	public SQLLogicalAND withLeftOperand(final SQLConstruct leftOperand) {
-		this.leftOperandIndex = this.getRSCRepository().addRSC(leftOperand);
-		leftOperand.setReferencingRSC(this);
+		this.leftOperandIndex = this.getRepository().addSQLConstruct(leftOperand);
+		leftOperand.setReferencingConstruct(this);
 
 		return this;
 	}
 
 	public SQLLogicalAND withRightOperand(final SQLConstruct rightOperand) {
-		this.rightOperandIndex = this.getRSCRepository().addRSC(rightOperand);
-		rightOperand.setReferencingRSC(this);
+		this.rightOperandIndex = this.getRepository().addSQLConstruct(rightOperand);
+		rightOperand.setReferencingConstruct(this);
 		return this;
 	}
 
@@ -71,11 +71,11 @@ public class SQLLogicalAND extends SQLFunction {
 	}
 
 	public SQLConstruct getLeftOperand() {
-		return getRSCRepository().getRSC(leftOperandIndex);
+		return getRepository().getSQLConstruct(leftOperandIndex);
 	}
 
 	public SQLConstruct getRightOperand() {
-		return getRSCRepository().getRSC(rightOperandIndex);
+		return getRepository().getSQLConstruct(rightOperandIndex);
 	}
 
 	public boolean isWithParenthesis() {

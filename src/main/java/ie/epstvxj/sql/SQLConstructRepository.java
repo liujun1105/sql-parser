@@ -38,7 +38,7 @@ public class SQLConstructRepository {
 		return stringBuilder.toString();
 	}
 
-	public Integer addRSC(final SQLConstruct rsc) {
+	public Integer addSQLConstruct(final SQLConstruct rsc) {
 		this.mapOfRSCIdentifierAndRSCConstruct.put(++indexer, rsc);
 		rsc.withIndex(indexer);
 		return indexer;
@@ -48,7 +48,7 @@ public class SQLConstructRepository {
 		this.mapOfRSCIdentifierAndRSCConstruct.remove(index);
 	}
 
-	public SQLConstruct getRSC(final int index) {
+	public SQLConstruct getSQLConstruct(final int index) {
 		return this.mapOfRSCIdentifierAndRSCConstruct.get(index);
 	}
 

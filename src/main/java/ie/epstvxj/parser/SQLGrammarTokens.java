@@ -95,5 +95,6 @@ public class SQLGrammarTokens {
 	public static final String	UPDATE			= "UPDATE";
 
 	public static final String	VALUES			= "VALUES";
+	public static final String	UNION			= "UNION";
 
 }

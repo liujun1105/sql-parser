@@ -20,7 +20,7 @@ public final class SQLConstructIdentifierManager {
 		seq.set(0);
 	}
 
-	public static synchronized int getRSCIdentifier() {
+	public static synchronized int getIdentifier() {
 		return seq.getAndIncrement();
 	}
 

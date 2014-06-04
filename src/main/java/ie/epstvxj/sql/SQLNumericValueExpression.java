@@ -18,8 +18,8 @@ public class SQLNumericValueExpression extends AbstractSQLConstruct {
 
 	public SQLNumericValueExpression withTerm(final SQLConstruct term) {
 		if (-1 == this.termIndex) {
-			this.termIndex = this.getRSCRepository().addRSC(term);
-			term.setReferencingRSC(this);
+			this.termIndex = this.getRepository().addSQLConstruct(term);
+			term.setReferencingConstruct(this);
 		} else {
 			this.addSubRSC(term);
 		}
@@ -28,14 +28,14 @@ public class SQLNumericValueExpression extends AbstractSQLConstruct {
 	}
 
 	public SQLNumericValueExpression withSign(final SQLOperator sign) {
-		this.signIndexList.add(this.getRSCRepository().addRSC(sign));
-		sign.setReferencingRSC(this);
+		this.signIndexList.add(this.getRepository().addSQLConstruct(sign));
+		sign.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLNumericValueExpression withAlias(final SQLCorrelationName correlationName) {
-		this.aliasIndex = this.getRSCRepository().addRSC(correlationName);
-		correlationName.setReferencingRSC(this);
+		this.aliasIndex = this.getRepository().addSQLConstruct(correlationName);
+		correlationName.setReferencingConstruct(this);
 		return this;
 	}
 
@@ -78,7 +78,7 @@ public class SQLNumericValueExpression extends AbstractSQLConstruct {
 
 		if (-1 != termIndex) {
 
-			sql.append(this.getRSCRepository().getRSC(termIndex).toSql());
+			sql.append(this.getRepository().getSQLConstruct(termIndex).toSql());
 
 			int index = 0;
 			for (int signIndex : signIndexList) {
@@ -95,24 +95,24 @@ public class SQLNumericValueExpression extends AbstractSQLConstruct {
 	}
 
 	public SQLCorrelationName getAlias() {
-		return (SQLCorrelationName) getRSCRepository().getRSC(aliasIndex);
+		return (SQLCorrelationName) getRepository().getSQLConstruct(aliasIndex);
 	}
 
 	public List<SQLConstruct> getTerms() {
 		List<SQLConstruct> list = new ArrayList<SQLConstruct>();
-		list.add(this.getRSCRepository().getRSC(termIndex));
+		list.add(this.getRepository().getSQLConstruct(termIndex));
 		list.addAll(this.subRSCList);
 		return list;
 	}
 
 	public SQLOperator getSign(final int index) {
-		return (SQLOperator) getRSCRepository().getRSC(index);
+		return (SQLOperator) getRepository().getSQLConstruct(index);
 	}
 
 	public List<SQLOperator> getSigns() {
 		List<SQLOperator> list = new ArrayList<SQLOperator>();
 		for (Integer signIndex : signIndexList) {
-			list.add((SQLOperator) getRSCRepository().getRSC(signIndex));
+			list.add((SQLOperator) getRepository().getSQLConstruct(signIndex));
 		}
 		return list;
 	}
@@ -123,7 +123,7 @@ public class SQLNumericValueExpression extends AbstractSQLConstruct {
 				SQLConstructIdentifierManager.getRSCCloneIdentifier(this)).withSQLQueryContext(this.sqlQueryContext);
 
 		if (-1 != termIndex) {
-			nve.withTerm(this.getRSCRepository().getRSC(termIndex).deepClone());
+			nve.withTerm(this.getRepository().getSQLConstruct(termIndex).deepClone());
 		}
 
 		for (SQLConstruct rsc : getSubRSCList()) {
@@ -147,7 +147,7 @@ public class SQLNumericValueExpression extends AbstractSQLConstruct {
 				.withSQLQueryContext(this.sqlQueryContext);
 
 		if (-1 != termIndex) {
-			nve.withTerm(this.getRSCRepository().getRSC(termIndex).deepCloneWithPreservedIdentifier());
+			nve.withTerm(this.getRepository().getSQLConstruct(termIndex).deepCloneWithPreservedIdentifier());
 		}
 
 		for (SQLConstruct rsc : getSubRSCList()) {

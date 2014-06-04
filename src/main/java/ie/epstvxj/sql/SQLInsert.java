@@ -25,13 +25,13 @@ public class SQLInsert extends AbstractSQLConstruct {
 	private Integer						embeddedQueryIndex	= -1;
 
 	public SQLInsert intoTable(final SQLTable table) {
-		this.tableIndex = getRSCRepository().addRSC(table);
-		table.setReferencingRSC(this);
+		this.tableIndex = getRepository().addSQLConstruct(table);
+		table.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLTable getTable() {
-		return (SQLTable) getRSCRepository().getRSC(tableIndex);
+		return (SQLTable) getRepository().getSQLConstruct(tableIndex);
 	}
 
 	public SQLInsert withNewRow() {
@@ -52,8 +52,8 @@ public class SQLInsert extends AbstractSQLConstruct {
 			withNewRow();
 		}
 
-		multiRowIndexList.get(multiRowIndex).add(this.getRSCRepository().addRSC(value));
-		value.setReferencingRSC(this);
+		multiRowIndexList.get(multiRowIndex).add(this.getRepository().addSQLConstruct(value));
+		value.setReferencingConstruct(this);
 
 		return this;
 	}
@@ -72,8 +72,8 @@ public class SQLInsert extends AbstractSQLConstruct {
 	}
 
 	public SQLInsert withColumn(final SQLColumn column) {
-		columnIndexList.add(getRSCRepository().addRSC(column));
-		column.setReferencingRSC(this);
+		columnIndexList.add(getRepository().addSQLConstruct(column));
+		column.setReferencingConstruct(this);
 		return this;
 	}
 
@@ -91,7 +91,7 @@ public class SQLInsert extends AbstractSQLConstruct {
 		List<SQLColumn> columnList = new ArrayList<SQLColumn>();
 
 		for (Integer index : columnIndexList) {
-			columnList.add((SQLColumn) this.getRSCRepository().getRSC(index));
+			columnList.add((SQLColumn) this.getRepository().getSQLConstruct(index));
 		}
 		return columnList;
 	}
@@ -116,7 +116,7 @@ public class SQLInsert extends AbstractSQLConstruct {
 		List<Integer> valueIndexList = multiRowIndexList.get(index);
 
 		for (Integer valueIndex : valueIndexList) {
-			valueList.add((SQLValue) this.getRSCRepository().getRSC(valueIndex));
+			valueList.add((SQLValue) this.getRepository().getSQLConstruct(valueIndex));
 		}
 
 		return valueList;
@@ -195,13 +195,13 @@ public class SQLInsert extends AbstractSQLConstruct {
 	}
 
 	public SQLInsert withEmbeddedQuery(final SQLConstruct embeddedQuery) {
-		this.embeddedQueryIndex = this.getRSCRepository().addRSC(embeddedQuery);
-		embeddedQuery.setReferencingRSC(this);
+		this.embeddedQueryIndex = this.getRepository().addSQLConstruct(embeddedQuery);
+		embeddedQuery.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLConstruct getEmbeddedQuery() {
-		return this.getRSCRepository().getRSC(this.embeddedQueryIndex);
+		return this.getRepository().getSQLConstruct(this.embeddedQueryIndex);
 	}
 
 	@Override

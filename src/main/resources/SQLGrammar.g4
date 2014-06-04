@@ -559,10 +559,9 @@ with_list_element   : query_name (Left_Paren with_column_list Right_Paren)?
 with_column_list    : column_name_list;
 
 query_expression_body   : query_term
-                            | query_expression_body UNION (ALL | DISTINCT)? (corresponding_spec)? query_term
-                            | query_expression_body EXCEPT (ALL | DISTINCT)? (corresponding_spec)? query_term
-                            ;
-
+                        | query_expression_body UNION (ALL | DISTINCT)? (corresponding_spec)? query_term
+                        | query_expression_body EXCEPT (ALL | DISTINCT)? (corresponding_spec)? query_term
+                        ;
 query_term                  : query_primary | query_term INTERSECT (ALL | DISTINCT)? (corresponding_spec)? query_primary;
 query_primary		    : simple_table | Left_Paren query_expression_body Right_Paren ;
 simple_table                : query_specification | table_value_constructor | explicit_table;

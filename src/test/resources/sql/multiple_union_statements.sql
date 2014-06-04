@@ -1,0 +1,1 @@
+select a from T union select b from F union select c FROM H where c in (select c from H1 union select c from H2);

@@ -16,13 +16,13 @@ public class SQLUserDefinedFunction extends SQLFunction {
 	}
 
 	public SQLUserDefinedFunction(final String functionName, final SQLConstruct operand) {
-		this.operandIndex = this.getRSCRepository().addRSC(operand);
+		this.operandIndex = this.getRepository().addSQLConstruct(operand);
 		this.functionName = functionName;
-		operand.setReferencingRSC(this);
+		operand.setReferencingConstruct(this);
 	}
 
 	public SQLConstruct getOperand() {
-		return this.getRSCRepository().getRSC(operandIndex);
+		return this.getRepository().getSQLConstruct(operandIndex);
 	}
 
 	@Override

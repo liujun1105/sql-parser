@@ -35,25 +35,25 @@ public class SQLInFunction extends SQLFunction {
 	}
 
 	public SQLInFunction withOperand1(final SQLConstruct operand1) {
-		this.operandIndex1 = this.getRSCRepository().addRSC(operand1);
-		operand1.setReferencingRSC(this);
+		this.operandIndex1 = this.getRepository().addSQLConstruct(operand1);
+		operand1.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLConstruct getOperand1() {
-		return this.getRSCRepository().getRSC(operandIndex1);
+		return this.getRepository().getSQLConstruct(operandIndex1);
 	}
 
 	public SQLInFunction withOperand2(final SQLConstruct operand2) {
 		if (null != operand2) {
-			this.operandIndex2 = this.getRSCRepository().addRSC(operand2);
-			operand2.setReferencingRSC(this);
+			this.operandIndex2 = this.getRepository().addSQLConstruct(operand2);
+			operand2.setReferencingConstruct(this);
 		}
 		return this;
 	}
 
 	public SQLConstruct getOperand2() {
-		return this.getRSCRepository().getRSC(operandIndex2);
+		return this.getRepository().getSQLConstruct(operandIndex2);
 	}
 
 	@Override

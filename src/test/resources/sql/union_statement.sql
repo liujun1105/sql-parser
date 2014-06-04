@@ -1,0 +1,1 @@
+select a from T union select b from F;

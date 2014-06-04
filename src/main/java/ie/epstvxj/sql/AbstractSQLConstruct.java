@@ -60,11 +60,11 @@ public abstract class AbstractSQLConstruct implements SQLConstruct {
 			subRSCList.remove(oldRSC);
 			subRSCList.add(newRSC);
 		}
-		newRSC.setReferencingRSC(this);
+		newRSC.setReferencingConstruct(this);
 	}
 
 	@Override
-	public SQLConstructRepository getRSCRepository() {
+	public SQLConstructRepository getRepository() {
 		return this.rscRepository;
 	}
 
@@ -74,7 +74,7 @@ public abstract class AbstractSQLConstruct implements SQLConstruct {
 	}
 
 	@Override
-	public void setReferencingRSC(final SQLConstruct referencingRSC) {
+	public void setReferencingConstruct(final SQLConstruct referencingRSC) {
 		this.referencingRSC = referencingRSC;
 	}
 
@@ -107,7 +107,7 @@ public abstract class AbstractSQLConstruct implements SQLConstruct {
 	public void addSubRSC(final SQLConstruct subRSC) {
 		if (isValidSubRSC(subRSC)) {
 			subRSCList.add(subRSC);
-			subRSC.setReferencingRSC(this);
+			subRSC.setReferencingConstruct(this);
 		} else {
 			logAddInvalidSubSQLConstruct(LOG, this, subRSC);
 		}

@@ -22,15 +22,15 @@ public class SQLJoin extends AbstractSQLConstruct {
 	}
 
 	public SQLJoin onTable(final SQLTargetResource targetSource) {
-		this.targetSourceIndex = getRSCRepository().addRSC(targetSource);
-		targetSource.setReferencingRSC(this);
+		this.targetSourceIndex = getRepository().addSQLConstruct(targetSource);
+		targetSource.setReferencingConstruct(this);
 
 		return this;
 	}
 
 	public SQLJoin withConditions(final SQLSearchConditions conditions) {
-		this.searchConditionsIndex = getRSCRepository().addRSC(conditions);
-		conditions.setReferencingRSC(this);
+		this.searchConditionsIndex = getRepository().addSQLConstruct(conditions);
+		conditions.setReferencingConstruct(this);
 		return this;
 	}
 
@@ -52,11 +52,11 @@ public class SQLJoin extends AbstractSQLConstruct {
 	}
 
 	public SQLTargetResource getTargetSource() {
-		return (SQLTargetResource) this.getRSCRepository().getRSC(targetSourceIndex);
+		return (SQLTargetResource) this.getRepository().getSQLConstruct(targetSourceIndex);
 	}
 
 	public SQLSearchConditions getConditions() {
-		return (SQLSearchConditions) this.getRSCRepository().getRSC(searchConditionsIndex);
+		return (SQLSearchConditions) this.getRepository().getSQLConstruct(searchConditionsIndex);
 	}
 
 	@Override

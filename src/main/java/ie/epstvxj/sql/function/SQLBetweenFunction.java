@@ -116,32 +116,32 @@ public class SQLBetweenFunction extends SQLFunction {
 	}
 
 	public SQLConstruct getPredicand() {
-		return this.getRSCRepository().getRSC(predicandIndex);
+		return this.getRepository().getSQLConstruct(predicandIndex);
 	}
 
 	public SQLBetweenFunction withPredicand(final SQLConstruct predicand) {
-		this.predicandIndex = this.getRSCRepository().addRSC(predicand);
-		predicand.setReferencingRSC(this);
+		this.predicandIndex = this.getRepository().addSQLConstruct(predicand);
+		predicand.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLConstruct getPredicate1() {
-		return this.getRSCRepository().getRSC(predicateIndex1);
+		return this.getRepository().getSQLConstruct(predicateIndex1);
 	}
 
 	public SQLBetweenFunction withPredicate1(final SQLConstruct predicate1) {
-		this.predicateIndex1 = this.getRSCRepository().addRSC(predicate1);
-		predicate1.setReferencingRSC(this);
+		this.predicateIndex1 = this.getRepository().addSQLConstruct(predicate1);
+		predicate1.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLConstruct getPredicate2() {
-		return this.getRSCRepository().getRSC(predicateIndex2);
+		return this.getRepository().getSQLConstruct(predicateIndex2);
 	}
 
 	public SQLBetweenFunction withPredicate2(final SQLConstruct predicate2) {
-		this.predicateIndex2 = this.getRSCRepository().addRSC(predicate2);
-		predicate2.setReferencingRSC(this);
+		this.predicateIndex2 = this.getRepository().addSQLConstruct(predicate2);
+		predicate2.setReferencingConstruct(this);
 		return this;
 	}
 

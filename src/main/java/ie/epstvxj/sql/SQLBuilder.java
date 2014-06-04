@@ -81,176 +81,181 @@ public final class SQLBuilder {
 	}
 
 	public SQLLogicalAND and() {
-		SQLLogicalAND and = new SQLLogicalAND().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLLogicalAND and = new SQLLogicalAND().withId(SQLConstructIdentifierManager.getIdentifier());
 		return and;
 	}
 
 	public SQLLogicalOR or() {
-		SQLLogicalOR or = new SQLLogicalOR().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLLogicalOR or = new SQLLogicalOR().withId(SQLConstructIdentifierManager.getIdentifier());
 		return or;
 	}
 
 	public SQLInsert insert() {
-		SQLInsert insert = new SQLInsert().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLInsert insert = new SQLInsert().withId(SQLConstructIdentifierManager.getIdentifier());
 		return insert;
 	}
 
 	public SQLDelete delete() {
-		SQLDelete delete = new SQLDelete().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLDelete delete = new SQLDelete().withId(SQLConstructIdentifierManager.getIdentifier());
 		return delete;
 	}
 
 	public SQLUpdate update() {
-		SQLUpdate update = new SQLUpdate().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLUpdate update = new SQLUpdate().withId(SQLConstructIdentifierManager.getIdentifier());
 		return update;
 	}
 
 	public SQLSelect select() {
-		SQLSelect select = new SQLSelect().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLSelect select = new SQLSelect().withId(SQLConstructIdentifierManager.getIdentifier());
 		return select;
 	}
 
 	public SQLFrom from() {
-		SQLFrom from = new SQLFrom().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLFrom from = new SQLFrom().withId(SQLConstructIdentifierManager.getIdentifier());
 		return from;
 	}
 
 	public SQLWhere where() {
-		SQLWhere where = new SQLWhere().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLWhere where = new SQLWhere().withId(SQLConstructIdentifierManager.getIdentifier());
 		return where;
 	}
 
 	public SQLHaving having() {
-		SQLHaving having = new SQLHaving().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLHaving having = new SQLHaving().withId(SQLConstructIdentifierManager.getIdentifier());
 		return having;
 	}
 
 	public SQLOrderBy orderBy() {
-		SQLOrderBy orderBy = new SQLOrderBy().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLOrderBy orderBy = new SQLOrderBy().withId(SQLConstructIdentifierManager.getIdentifier());
 		return orderBy;
 	}
 
 	public SQLOrderBy orderBy(final SQLConstruct... orderByItems) {
-		SQLOrderBy orderBy = new SQLOrderBy(orderByItems).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLOrderBy orderBy = new SQLOrderBy(orderByItems).withId(SQLConstructIdentifierManager.getIdentifier());
 		return orderBy;
 	}
 
 	public SQLGroupBy groupBy() {
-		SQLGroupBy groupBy = new SQLGroupBy().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLGroupBy groupBy = new SQLGroupBy().withId(SQLConstructIdentifierManager.getIdentifier());
 		return groupBy;
 	}
 
 	public SQLGroupBy groupBy(final SQLConstruct... groupByItems) {
-		SQLGroupBy groupBy = new SQLGroupBy(groupByItems).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLGroupBy groupBy = new SQLGroupBy(groupByItems).withId(SQLConstructIdentifierManager.getIdentifier());
 		return groupBy;
 	}
 
 	public SQLSubSelect subSelect() {
-		SQLSubSelect subSelect = new SQLSubSelect().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLSubSelect subSelect = new SQLSubSelect().withId(SQLConstructIdentifierManager.getIdentifier());
 		return subSelect;
 	}
 
 	public SQLColumn column() {
-		SQLColumn column = new SQLColumn().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLColumn column = new SQLColumn().withId(SQLConstructIdentifierManager.getIdentifier());
 		return column;
 	}
 
 	public SQLColumn column(final String columnName) {
-		SQLColumn column = new SQLColumn(columnName).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLColumn column = new SQLColumn(columnName).withId(SQLConstructIdentifierManager.getIdentifier());
 		return column;
 	}
 
 	public SQLTable table() {
-		SQLTable table = new SQLTable().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLTable table = new SQLTable().withId(SQLConstructIdentifierManager.getIdentifier());
 		return table;
 	}
 
 	public SQLSearchConditions conditions() {
 		SQLSearchConditions searchConditions = new SQLSearchConditions().withId(SQLConstructIdentifierManager
-				.getRSCIdentifier());
+				.getIdentifier());
 		return searchConditions;
 	}
 
 	public SQLJoin join() {
-		SQLJoin join = new SQLJoin(SQLJoinType.JOIN).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLJoin join = new SQLJoin(SQLJoinType.JOIN).withId(SQLConstructIdentifierManager.getIdentifier());
 		return join;
 	}
 
 	public SQLJoin innerJoin() {
-		SQLJoin join = new SQLJoin(SQLJoinType.INNER_JOIN).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLJoin join = new SQLJoin(SQLJoinType.INNER_JOIN).withId(SQLConstructIdentifierManager.getIdentifier());
 		return join;
 	}
 
 	public SQLJoin leftJoin() {
-		SQLJoin join = new SQLJoin(SQLJoinType.LEFT_JOIN).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLJoin join = new SQLJoin(SQLJoinType.LEFT_JOIN).withId(SQLConstructIdentifierManager.getIdentifier());
 		return join;
 	}
 
 	public SQLJoin rightJoin() {
-		SQLJoin join = new SQLJoin(SQLJoinType.RIGHT_JOIN).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLJoin join = new SQLJoin(SQLJoinType.RIGHT_JOIN).withId(SQLConstructIdentifierManager.getIdentifier());
 		return join;
 	}
 
 	public SQLJoin fullJoin() {
-		SQLJoin join = new SQLJoin(SQLJoinType.FULL_JOIN).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLJoin join = new SQLJoin(SQLJoinType.FULL_JOIN).withId(SQLConstructIdentifierManager.getIdentifier());
 		return join;
 	}
 
 	public SQLJoin unionJoin() {
-		SQLJoin join = new SQLJoin(SQLJoinType.UNION_JOIN).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLJoin join = new SQLJoin(SQLJoinType.UNION_JOIN).withId(SQLConstructIdentifierManager.getIdentifier());
 		return join;
 	}
 
 	public SQLJoin crossJoin() {
-		SQLJoin join = new SQLJoin(SQLJoinType.CROSS_JOIN).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLJoin join = new SQLJoin(SQLJoinType.CROSS_JOIN).withId(SQLConstructIdentifierManager.getIdentifier());
 		return join;
 	}
 
 	public SQLJoin naturalJoin() {
-		SQLJoin join = new SQLJoin(SQLJoinType.NATURAL_JOIN).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+		SQLJoin join = new SQLJoin(SQLJoinType.NATURAL_JOIN).withId(SQLConstructIdentifierManager.getIdentifier());
 		return join;
 	}
 
 	public SQLJoin naturalLeftJoin() {
 		SQLJoin join = new SQLJoin(SQLJoinType.NATURAL_LEFT_JOIN).withId(SQLConstructIdentifierManager
-				.getRSCIdentifier());
+				.getIdentifier());
 		return join;
 	}
 
 	public SQLJoin naturalRightJoin() {
 		SQLJoin join = new SQLJoin(SQLJoinType.NATURAL_RIGHT_JOIN).withId(SQLConstructIdentifierManager
-				.getRSCIdentifier());
+				.getIdentifier());
 		return join;
 	}
 
 	public SQLJoin naturalFullJoin() {
 		SQLJoin join = new SQLJoin(SQLJoinType.NATURAL_FULL_JOIN).withId(SQLConstructIdentifierManager
-				.getRSCIdentifier());
+				.getIdentifier());
 		return join;
 	}
 
 	public SQLJoin naturalInnerJoin() {
 		SQLJoin join = new SQLJoin(SQLJoinType.NATURAL_INNER_JOIN).withId(SQLConstructIdentifierManager
-				.getRSCIdentifier());
+				.getIdentifier());
 		return join;
 	}
 
 	public SQLSelectedItem selectedItem(final SQLConstruct rsc) {
 		SQLSelectedItem selectedItem = new SQLSelectedItem(rsc)
-				.withId(SQLConstructIdentifierManager.getRSCIdentifier());
+				.withId(SQLConstructIdentifierManager.getIdentifier());
 		return selectedItem;
 	}
 
 	public SQLCorrelationName correlationName(final String correlationName) {
-		SQLCorrelationName rscCorrelationname = new SQLCorrelationName(correlationName).withId(SQLConstructIdentifierManager
-				.getRSCIdentifier());
+		SQLCorrelationName rscCorrelationname = new SQLCorrelationName(correlationName)
+				.withId(SQLConstructIdentifierManager.getIdentifier());
 		return rscCorrelationname;
 	}
 
 	public SQLNumericValueExpression numericValueExpr() {
 		SQLNumericValueExpression numericValueExpression = new SQLNumericValueExpression()
-				.withId(SQLConstructIdentifierManager.getRSCIdentifier());
+				.withId(SQLConstructIdentifierManager.getIdentifier());
 		return numericValueExpression;
+	}
+
+	public SQLUnion union() {
+		SQLUnion union = new SQLUnion().withId(SQLConstructIdentifierManager.getIdentifier());
+		return union;
 	}
 
 	public class Function {
@@ -260,158 +265,158 @@ public final class SQLBuilder {
 		}
 
 		public SQLInFunction in() {
-			SQLInFunction func = new SQLInFunction().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLInFunction func = new SQLInFunction().withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLInFunction in(final SQLConstruct operand1, final SQLConstruct operand2) {
 			SQLInFunction func = new SQLInFunction(operand1, operand2).withId(SQLConstructIdentifierManager
-					.getRSCIdentifier());
+					.getIdentifier());
 			return func;
 		}
 
 		public SQLInFunction notIn(final SQLConstruct operand1, final SQLConstruct operand2) {
 			SQLInFunction func = new SQLInFunction().notIn(operand1, operand2).withId(
-					SQLConstructIdentifierManager.getRSCIdentifier());
+					SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLComparisonFunction comparison() {
 			SQLComparisonFunction func = new SQLComparisonFunction().withId(SQLConstructIdentifierManager
-					.getRSCIdentifier());
+					.getIdentifier());
 			return func;
 		}
 
 		public SQLComparisonFunction comparison(final SQLConstruct operand1, final SQLConstruct operand2,
 				final SQLOperator operator) {
 			SQLComparisonFunction func = new SQLComparisonFunction(operand1, operator, operand2)
-					.withId(SQLConstructIdentifierManager.getRSCIdentifier());
+					.withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLComparisonFunction equality(final SQLConstruct operand1, final SQLConstruct operand2) {
 			SQLComparisonFunction func = new SQLComparisonFunction(operand1, SQLBuilder.init().operator(
-					SQLGrammarTokens.EQUAL), operand2).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+					SQLGrammarTokens.EQUAL), operand2).withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLBetweenFunction between() {
-			SQLBetweenFunction func = new SQLBetweenFunction().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLBetweenFunction func = new SQLBetweenFunction().withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLBetweenFunction between(final SQLConstruct predicand, final SQLConstruct predicate1,
 				final SQLConstruct predicate2) {
 			SQLBetweenFunction func = new SQLBetweenFunction(predicand, predicate1, predicate2)
-					.withId(SQLConstructIdentifierManager.getRSCIdentifier());
+					.withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLBetweenFunction between(final SQLConstruct predicand, final SQLConstruct predicate1,
 				final SQLConstruct predicate2, final BetweenType betweenType) {
 			SQLBetweenFunction func = new SQLBetweenFunction(predicand, predicate1, predicate2, betweenType)
-					.withId(SQLConstructIdentifierManager.getRSCIdentifier());
+					.withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLExistsFunction exists() {
-			SQLExistsFunction func = new SQLExistsFunction().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLExistsFunction func = new SQLExistsFunction().withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLExistsFunction exists(final SQLConstruct subquery) {
 			SQLExistsFunction func = new SQLExistsFunction(subquery).withId(SQLConstructIdentifierManager
-					.getRSCIdentifier());
+					.getIdentifier());
 			return func;
 		}
 
 		public SQLNotFunction not(final SQLConstruct operand) {
-			SQLNotFunction func = new SQLNotFunction(operand).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLNotFunction func = new SQLNotFunction(operand).withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLSumFunction sum() {
-			SQLSumFunction func = new SQLSumFunction().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLSumFunction func = new SQLSumFunction().withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLSumFunction sum(final SQLConstruct operand) {
-			SQLSumFunction func = new SQLSumFunction(operand).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLSumFunction func = new SQLSumFunction(operand).withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLAvgFunction avg() {
-			SQLAvgFunction func = new SQLAvgFunction().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLAvgFunction func = new SQLAvgFunction().withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLAvgFunction avg(final SQLConstruct operand) {
-			SQLAvgFunction func = new SQLAvgFunction(operand).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLAvgFunction func = new SQLAvgFunction(operand).withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLMaxFunction max() {
-			SQLMaxFunction func = new SQLMaxFunction().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLMaxFunction func = new SQLMaxFunction().withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLMaxFunction max(final SQLConstruct operand) {
-			SQLMaxFunction func = new SQLMaxFunction(operand).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLMaxFunction func = new SQLMaxFunction(operand).withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLMinFunction min() {
-			SQLMinFunction func = new SQLMinFunction().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLMinFunction func = new SQLMinFunction().withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLMinFunction min(final SQLConstruct operand) {
-			SQLMinFunction func = new SQLMinFunction(operand).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLMinFunction func = new SQLMinFunction(operand).withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLLikeFunction like() {
-			SQLLikeFunction func = new SQLLikeFunction().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLLikeFunction func = new SQLLikeFunction().withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLLikeFunction like(final SQLConstruct operand1, final SQLStringValue operand2) {
 			SQLLikeFunction func = new SQLLikeFunction(operand1, operand2).withId(SQLConstructIdentifierManager
-					.getRSCIdentifier());
+					.getIdentifier());
 			return func;
 		}
 
 		public SQLCountFunction count() {
-			SQLCountFunction func = new SQLCountFunction().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLCountFunction func = new SQLCountFunction().withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLCountFunction count(final SQLConstruct operand) {
 			SQLCountFunction func = new SQLCountFunction().withOperand(operand).withId(
-					SQLConstructIdentifierManager.getRSCIdentifier());
+					SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLNullFunction isNull() {
-			SQLNullFunction func = new SQLNullFunction().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLNullFunction func = new SQLNullFunction().withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLNullFunction notNull() {
 			SQLNullFunction func = new SQLNullFunction().notNull().withId(
-					SQLConstructIdentifierManager.getRSCIdentifier());
+					SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLUserDefinedFunction udf(final String functionName, final SQLConstruct operand) {
 			SQLUserDefinedFunction func = new SQLUserDefinedFunction(functionName, operand)
-					.withId(SQLConstructIdentifierManager.getRSCIdentifier());
+					.withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
 		public SQLAssignmentFunction assignment(final SQLConstruct operand1, final SQLConstruct operand2) {
 			SQLAssignmentFunction func = new SQLAssignmentFunction(operand1, operand2)
-					.withId(SQLConstructIdentifierManager.getRSCIdentifier());
+					.withId(SQLConstructIdentifierManager.getIdentifier());
 			return func;
 		}
 
@@ -423,79 +428,79 @@ public final class SQLBuilder {
 		}
 
 		public SQLIntValue intValue(final int value) {
-			SQLIntValue rscValue = new SQLIntValue(value).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLIntValue rscValue = new SQLIntValue(value).withId(SQLConstructIdentifierManager.getIdentifier());
 			return rscValue;
 		}
 
 		public SQLFloatValue floatValue(final float value) {
-			SQLFloatValue rscValue = new SQLFloatValue(value).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLFloatValue rscValue = new SQLFloatValue(value).withId(SQLConstructIdentifierManager.getIdentifier());
 			return rscValue;
 		}
 
 		public SQLStringValue stringValue(final String value) {
 			SQLStringValue rscValue = new SQLStringValue(value)
-					.withId(SQLConstructIdentifierManager.getRSCIdentifier());
+					.withId(SQLConstructIdentifierManager.getIdentifier());
 			return rscValue;
 		}
 
 		public SQLOperator operator(final String operator) {
 			SQLOperator rscOperator = new SQLOperator(operator)
-					.withId(SQLConstructIdentifierManager.getRSCIdentifier());
+					.withId(SQLConstructIdentifierManager.getIdentifier());
 			return rscOperator;
 		}
 
 		public SQLDateValue dateValue(final Date value) {
-			SQLDateValue rscValue = new SQLDateValue(value).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLDateValue rscValue = new SQLDateValue(value).withId(SQLConstructIdentifierManager.getIdentifier());
 			return rscValue;
 		}
 
 		public SQLDateValue dateValue(final long valueInMillionSeconds) {
 			SQLDateValue rscValue = new SQLDateValue(valueInMillionSeconds).withId(SQLConstructIdentifierManager
-					.getRSCIdentifier());
+					.getIdentifier());
 			return rscValue;
 		}
 
 		public SQLDateValue dateValue(final String dateInString, final String pattern) {
 			SQLDateValue rscValue = new SQLDateValue().withDateValue(dateInString, pattern).withId(
-					SQLConstructIdentifierManager.getRSCIdentifier());
+					SQLConstructIdentifierManager.getIdentifier());
 			return rscValue;
 		}
 
 		public SQLBooleanValue truthValue() {
 			SQLBooleanValue rscValue = new SQLBooleanValue().withValue(true).withId(
-					SQLConstructIdentifierManager.getRSCIdentifier());
+					SQLConstructIdentifierManager.getIdentifier());
 			return rscValue;
 		}
 
 		public SQLBooleanValue falseValue() {
 			SQLBooleanValue rscValue = new SQLBooleanValue().withValue(false).withId(
-					SQLConstructIdentifierManager.getRSCIdentifier());
+					SQLConstructIdentifierManager.getIdentifier());
 			return rscValue;
 		}
 
 		public SQLListValue listValue() {
-			SQLListValue rscValue = new SQLListValue().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLListValue rscValue = new SQLListValue().withId(SQLConstructIdentifierManager.getIdentifier());
 			return rscValue;
 		}
 
 		public SQLListValue listValue(final SQLConstruct... values) {
-			SQLListValue rscValue = new SQLListValue(values).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLListValue rscValue = new SQLListValue(values).withId(SQLConstructIdentifierManager.getIdentifier());
 			return rscValue;
 		}
 
 		public SQLAsterisk asterisk() {
-			SQLAsterisk rscAsterisk = new SQLAsterisk().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLAsterisk rscAsterisk = new SQLAsterisk().withId(SQLConstructIdentifierManager.getIdentifier());
 			return rscAsterisk;
 		}
 
 		public SQLDynamicParameter dynamicParameter() {
 			SQLDynamicParameter dynamicParamter = new SQLDynamicParameter().withId(SQLConstructIdentifierManager
-					.getRSCIdentifier());
+					.getIdentifier());
 			return dynamicParamter;
 		}
 
 		public SQLNullValue nullValue() {
-			SQLNullValue rscNullValue = new SQLNullValue().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLNullValue rscNullValue = new SQLNullValue().withId(SQLConstructIdentifierManager.getIdentifier());
 			return rscNullValue;
 		}
 	}
@@ -506,12 +511,12 @@ public final class SQLBuilder {
 		}
 
 		public SQLIgnoreToken ignore() {
-			SQLIgnoreToken ignoreToken = new SQLIgnoreToken().withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLIgnoreToken ignoreToken = new SQLIgnoreToken().withId(SQLConstructIdentifierManager.getIdentifier());
 			return ignoreToken;
 		}
 
 		public SQLSign sign(final String sign) {
-			SQLSign rscSign = new SQLSign(sign).withId(SQLConstructIdentifierManager.getRSCIdentifier());
+			SQLSign rscSign = new SQLSign(sign).withId(SQLConstructIdentifierManager.getIdentifier());
 			return rscSign;
 		}
 
@@ -581,7 +586,7 @@ public final class SQLBuilder {
 		private void analyseSelect(final SQLSelect select) {
 
 			System.out.println(select + " [" + select.getSQLQueryContext() + "]");
-			System.out.println(select.getRSCRepository());
+			System.out.println(select.getRepository());
 			System.out.println("--------------------------\n");
 
 			analyseHelper(select.getFrom());
@@ -596,7 +601,7 @@ public final class SQLBuilder {
 				if (null != ((SQLSubSelect) select).getAlias()) {
 					System.out.println(((SQLSubSelect) select).getAlias() + " ["
 							+ ((SQLSubSelect) select).getAlias().getSQLQueryContext() + "]");
-					System.out.println(((SQLSubSelect) select).getRSCRepository());
+					System.out.println(((SQLSubSelect) select).getRepository());
 					System.out.println("--------------------------\n");
 				}
 			}
@@ -605,7 +610,7 @@ public final class SQLBuilder {
 		private void analyseUpdate(final SQLUpdate update) {
 
 			System.out.println(update + " [" + update.getSQLQueryContext() + "]");
-			System.out.println(update.getRSCRepository());
+			System.out.println(update.getRepository());
 			System.out.println("--------------------------\n");
 
 			if (null != update.getTable()) {
@@ -621,7 +626,7 @@ public final class SQLBuilder {
 
 		private void analyseDelete(final SQLDelete delete) {
 			System.out.println(delete + " [" + delete.getSQLQueryContext() + "]");
-			System.out.println(delete.getRSCRepository());
+			System.out.println(delete.getRepository());
 			System.out.println("--------------------------\n");
 
 			if (null != delete.getTable()) {
@@ -637,7 +642,7 @@ public final class SQLBuilder {
 		private void analyseInsert(final SQLInsert insert) {
 
 			System.out.println(insert + " [" + insert.getSQLQueryContext() + "]");
-			System.out.println(insert.getRSCRepository());
+			System.out.println(insert.getRepository());
 			System.out.println("--------------------------\n");
 
 			List<SQLColumn> columns = insert.getColumns();
@@ -666,7 +671,7 @@ public final class SQLBuilder {
 
 		private void analyseHaving(final SQLHaving having) {
 			System.out.println(having + " [" + having.getSQLQueryContext() + "]");
-			System.out.println(having.getRSCRepository());
+			System.out.println(having.getRepository());
 			System.out.println("--------------------------\n");
 			analyseSubRSCList(having.getSubRSCList());
 			analyseHelper(having.getSearchConditions());
@@ -674,21 +679,21 @@ public final class SQLBuilder {
 
 		private void analyseGroupBy(final SQLGroupBy groupBy) {
 			System.out.println(groupBy + " [" + groupBy.getSQLQueryContext() + "]");
-			System.out.println(groupBy.getRSCRepository());
+			System.out.println(groupBy.getRepository());
 			System.out.println("--------------------------\n");
 			analyseSubRSCList(groupBy.getSubRSCList());
 		}
 
 		private void analyseOrderBy(final SQLOrderBy orderBy) {
 			System.out.println(orderBy + " [" + orderBy.getSQLQueryContext() + "]");
-			System.out.println(orderBy.getRSCRepository());
+			System.out.println(orderBy.getRepository());
 			System.out.println("--------------------------\n");
 			analyseSubRSCList(orderBy.getSubRSCList());
 		}
 
 		private void analyseWhere(final SQLWhere where) {
 			System.out.println(where + " [" + where.getSQLQueryContext() + "]");
-			System.out.println(where.getRSCRepository());
+			System.out.println(where.getRepository());
 			System.out.println("--------------------------\n");
 			analyseSubRSCList(where.getSubRSCList());
 			analyseHelper(where.getSearchConditions());
@@ -697,7 +702,7 @@ public final class SQLBuilder {
 		private void analyseFrom(final SQLFrom from) {
 
 			System.out.println(from + " [" + from.getSQLQueryContext() + "]");
-			System.out.println(from.getRSCRepository());
+			System.out.println(from.getRepository());
 			System.out.println("--------------------------\n");
 
 			List<SQLConstruct> rscList = from.getSubRSCList();
@@ -715,7 +720,7 @@ public final class SQLBuilder {
 		private void analyseJoins(final List<SQLJoin> joins) {
 			for (SQLJoin join : joins) {
 				System.out.println(join + " [" + join.getSQLQueryContext() + "]");
-				System.out.println(join.getRSCRepository());
+				System.out.println(join.getRepository());
 				System.out.println("--------------------------\n");
 				analyseHelper(join.getTargetSource());
 				analyseHelper(join.getConditions());
@@ -732,7 +737,7 @@ public final class SQLBuilder {
 
 		private void analyseValue(final SQLValue value) {
 			System.out.println(value + " [" + value.getSQLQueryContext() + "]");
-			System.out.println(value.getRSCRepository());
+			System.out.println(value.getRepository());
 			System.out.println("--------------------------\n");
 		}
 
@@ -744,7 +749,7 @@ public final class SQLBuilder {
 					SQLLogicalAND and = (SQLLogicalAND) root;
 
 					System.out.println(and + " [" + and.getSQLQueryContext() + "]");
-					System.out.println(and.getRSCRepository());
+					System.out.println(and.getRepository());
 					System.out.println("--------------------------\n");
 
 					analyseConditionTree(and.getLeftOperand());
@@ -755,7 +760,7 @@ public final class SQLBuilder {
 					SQLLogicalOR or = (SQLLogicalOR) root;
 
 					System.out.println(or + " [" + or.getSQLQueryContext() + "]");
-					System.out.println(or.getRSCRepository());
+					System.out.println(or.getRepository());
 					System.out.println("--------------------------\n");
 
 					analyseConditionTree(or.getLeftOperand());
@@ -770,7 +775,7 @@ public final class SQLBuilder {
 		private void analyseFunction(final SQLFunction rsc) {
 
 			System.out.println(rsc + " [" + rsc.getSQLQueryContext() + "]");
-			System.out.println(rsc.getRSCRepository());
+			System.out.println(rsc.getRepository());
 			System.out.println("--------------------------\n");
 
 			if (rsc.getActualType() == SQLConstructType.COMPARISON_FUNCTION) {
@@ -817,7 +822,7 @@ public final class SQLBuilder {
 		private void analyseExpression(final SQLConstruct rsc) {
 			if (rsc.getActualType() == SQLConstructType.NUMERIC_VALUE_EXPRESSION) {
 				System.out.println(rsc + " [" + rsc.getSQLQueryContext() + "]");
-				System.out.println(rsc.getRSCRepository());
+				System.out.println(rsc.getRepository());
 				System.out.println("--------------------------\n");
 				SQLNumericValueExpression expr = (SQLNumericValueExpression) rsc;
 
@@ -836,13 +841,13 @@ public final class SQLBuilder {
 
 		private void analyseColumn(final SQLColumn column) {
 			System.out.println(column + " [" + column.getSQLQueryContext() + "]");
-			System.out.println(column.getRSCRepository());
+			System.out.println(column.getRepository());
 			System.out.println("--------------------------\n");
 		}
 
 		private void analyseTable(final SQLTable table) {
 			System.out.println(table + " [" + table.getSQLQueryContext() + "]");
-			System.out.println(table.getRSCRepository());
+			System.out.println(table.getRepository());
 			System.out.println("--------------------------\n");
 		}
 	}

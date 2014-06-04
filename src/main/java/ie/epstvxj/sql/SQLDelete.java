@@ -22,23 +22,23 @@ public class SQLDelete extends AbstractSQLConstruct {
 	}
 
 	public SQLDelete fromTable(final SQLTable table) {
-		this.tableIndex = this.getRSCRepository().addRSC(table);
-		table.setReferencingRSC(this);
+		this.tableIndex = this.getRepository().addSQLConstruct(table);
+		table.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLDelete withWhereClause(final SQLWhere where) {
-		this.whereIndex = this.getRSCRepository().addRSC(where);
-		where.setReferencingRSC(this);
+		this.whereIndex = this.getRepository().addSQLConstruct(where);
+		where.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLTable getTable() {
-		return (SQLTable) this.getRSCRepository().getRSC(tableIndex);
+		return (SQLTable) this.getRepository().getSQLConstruct(tableIndex);
 	}
 
 	public SQLWhere getWhere() {
-		return (SQLWhere) this.getRSCRepository().getRSC(whereIndex);
+		return (SQLWhere) this.getRepository().getSQLConstruct(whereIndex);
 	}
 
 	@Override

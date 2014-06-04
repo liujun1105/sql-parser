@@ -16,7 +16,7 @@ public class SQLSearchConditions extends AbstractSQLConstruct {
 	}
 
 	public SQLConstruct getRoot() {
-		return this.getRSCRepository().getRSC(rootIndex);
+		return this.getRepository().getSQLConstruct(rootIndex);
 	}
 
 	public boolean hasCondition() {
@@ -28,8 +28,8 @@ public class SQLSearchConditions extends AbstractSQLConstruct {
 	}
 
 	public SQLSearchConditions withCondition(final SQLConstruct rsc) {
-		this.rootIndex = this.getRSCRepository().addRSC(rsc);
-		rsc.setReferencingRSC(this);
+		this.rootIndex = this.getRepository().addSQLConstruct(rsc);
+		rsc.setReferencingConstruct(this);
 		return this;
 	}
 
@@ -41,8 +41,8 @@ public class SQLSearchConditions extends AbstractSQLConstruct {
 		SQLLogicalAND and = SQLBuilder.build().and().withLeftOperand(getRoot()).withRightOperand(rsc)
 				.withSQLQueryContext(getRoot().getSQLQueryContext());
 
-		rootIndex = this.getRSCRepository().addRSC(and);
-		and.setReferencingRSC(this);
+		rootIndex = this.getRepository().addSQLConstruct(and);
+		and.setReferencingConstruct(this);
 
 		return this;
 	}
@@ -55,9 +55,9 @@ public class SQLSearchConditions extends AbstractSQLConstruct {
 
 		SQLLogicalAND and = SQLBuilder.build().and().withLeftOperand(getRoot()).withRightOperand(rsc)
 				.withSQLQueryContext(getRoot().getSQLQueryContext());
-		rootIndex = this.getRSCRepository().addRSC(and);
+		rootIndex = this.getRepository().addSQLConstruct(and);
 		and.withParenthesis(true);
-		and.setReferencingRSC(this);
+		and.setReferencingConstruct(this);
 
 		return this;
 	}
@@ -68,8 +68,8 @@ public class SQLSearchConditions extends AbstractSQLConstruct {
 
 		SQLLogicalOR or = SQLBuilder.build().or().withLeftOperand(getRoot()).withRightOperand(rsc)
 				.withSQLQueryContext(getRoot().getSQLQueryContext());
-		rootIndex = this.getRSCRepository().addRSC(or);
-		or.setReferencingRSC(this);
+		rootIndex = this.getRepository().addSQLConstruct(or);
+		or.setReferencingConstruct(this);
 
 		return this;
 	}
@@ -80,9 +80,9 @@ public class SQLSearchConditions extends AbstractSQLConstruct {
 
 		SQLLogicalOR or = SQLBuilder.build().or().withLeftOperand(getRoot()).withRightOperand(rsc)
 				.withSQLQueryContext(getRoot().getSQLQueryContext());
-		rootIndex = this.getRSCRepository().addRSC(or);
+		rootIndex = this.getRepository().addSQLConstruct(or);
 		or.withParenthesis(true);
-		or.setReferencingRSC(this);
+		or.setReferencingConstruct(this);
 
 		return this;
 	}

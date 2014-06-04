@@ -17,12 +17,12 @@ public abstract class SQLNumericValue extends SQLValue {
 	private int	signIndex;
 
 	public SQLNumericValue withSign(final SQLSign rscSign) {
-		this.signIndex = this.getRSCRepository().addRSC(rscSign);
-		rscSign.setReferencingRSC(this);
+		this.signIndex = this.getRepository().addSQLConstruct(rscSign);
+		rscSign.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLSign sign() {
-		return (SQLSign) this.getRSCRepository().getRSC(signIndex);
+		return (SQLSign) this.getRepository().getSQLConstruct(signIndex);
 	}
 }

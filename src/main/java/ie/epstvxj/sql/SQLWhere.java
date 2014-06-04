@@ -30,13 +30,13 @@ public class SQLWhere extends AbstractSQLConstruct {
 	}
 
 	public SQLWhere withConditions(final SQLSearchConditions conditions) {
-		this.searchConditionsIndex = this.getRSCRepository().addRSC(conditions);
-		conditions.setReferencingRSC(this);
+		this.searchConditionsIndex = this.getRepository().addSQLConstruct(conditions);
+		conditions.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLSearchConditions getSearchConditions() {
-		return (SQLSearchConditions) this.getRSCRepository().getRSC(searchConditionsIndex);
+		return (SQLSearchConditions) this.getRepository().getSQLConstruct(searchConditionsIndex);
 	}
 
 	@Override

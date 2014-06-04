@@ -29,13 +29,13 @@ public class SQLExistsFunction extends SQLFunction {
 	}
 
 	public SQLExistsFunction withSubQuery(final SQLConstruct subquery) {
-		this.subQueryIndex = this.getRSCRepository().addRSC(subquery);
-		subquery.setReferencingRSC(this);
+		this.subQueryIndex = this.getRepository().addSQLConstruct(subquery);
+		subquery.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLConstruct getSubquery() {
-		return this.getRSCRepository().getRSC(subQueryIndex);
+		return this.getRepository().getSQLConstruct(subQueryIndex);
 	}
 
 	@Override

@@ -55,53 +55,53 @@ public class SQLSelect extends AbstractSQLConstruct {
 	}
 
 	public SQLSelect withWhereClause(final SQLWhere where) {
-		this.whereIndex = this.getRSCRepository().addRSC(where);
-		where.setReferencingRSC(this);
+		this.whereIndex = this.getRepository().addSQLConstruct(where);
+		where.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLSelect withFromClause(final SQLFrom from) {
-		this.fromIndex = this.getRSCRepository().addRSC(from);
-		from.setReferencingRSC(this);
+		this.fromIndex = this.getRepository().addSQLConstruct(from);
+		from.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLSelect withHavingClause(final SQLHaving having) {
-		this.havingIndex = this.getRSCRepository().addRSC(having);
-		having.setReferencingRSC(this);
+		this.havingIndex = this.getRepository().addSQLConstruct(having);
+		having.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLSelect withGroupBy(final SQLGroupBy groupBy) {
-		this.groupByIndex = this.getRSCRepository().addRSC(groupBy);
-		groupBy.setReferencingRSC(this);
+		this.groupByIndex = this.getRepository().addSQLConstruct(groupBy);
+		groupBy.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLSelect withOrderByClause(final SQLOrderBy orderBy) {
-		this.orderByIndex = this.getRSCRepository().addRSC(orderBy);
-		orderBy.setReferencingRSC(this);
+		this.orderByIndex = this.getRepository().addSQLConstruct(orderBy);
+		orderBy.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLWhere getWhere() {
-		return (SQLWhere) this.getRSCRepository().getRSC(whereIndex);
+		return (SQLWhere) this.getRepository().getSQLConstruct(whereIndex);
 	}
 
 	public SQLFrom getFrom() {
-		return (SQLFrom) this.getRSCRepository().getRSC(fromIndex);
+		return (SQLFrom) this.getRepository().getSQLConstruct(fromIndex);
 	}
 
 	public SQLHaving getHaving() {
-		return (SQLHaving) this.getRSCRepository().getRSC(havingIndex);
+		return (SQLHaving) this.getRepository().getSQLConstruct(havingIndex);
 	}
 
 	public SQLGroupBy getGroupBy() {
-		return (SQLGroupBy) this.getRSCRepository().getRSC(groupByIndex);
+		return (SQLGroupBy) this.getRepository().getSQLConstruct(groupByIndex);
 	}
 
 	public SQLOrderBy getOrderBy() {
-		return (SQLOrderBy) this.getRSCRepository().getRSC(orderByIndex);
+		return (SQLOrderBy) this.getRepository().getSQLConstruct(orderByIndex);
 	}
 
 	@Override

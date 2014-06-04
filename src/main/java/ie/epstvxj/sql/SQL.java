@@ -40,7 +40,7 @@ public interface SQL {
 	 */
 	String getIdentifier();
 
-	void setReferencingRSC(SQLConstruct rsc);
+	void setReferencingConstruct(SQLConstruct rsc);
 
 	SQLConstruct getReferencingRSC();
 
@@ -50,7 +50,7 @@ public interface SQL {
 
 	int getIndex();
 
-	public SQLConstructRepository getRSCRepository();
+	public SQLConstructRepository getRepository();
 
 	SQLQueryContext getSQLQueryContext();
 

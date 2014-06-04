@@ -36,7 +36,7 @@ public class SQLTable extends AbstractSQLConstruct implements SQLTargetResource 
 
 	@Override
 	public SQLCorrelationName getTableCorrelation() {
-		return (SQLCorrelationName) this.getRSCRepository().getRSC(correlationNameIndex);
+		return (SQLCorrelationName) this.getRepository().getSQLConstruct(correlationNameIndex);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class SQLTable extends AbstractSQLConstruct implements SQLTargetResource 
 	public List<SQLJoin> getJoins() {
 		List<SQLJoin> joinList = new ArrayList<SQLJoin>();
 		for (Integer joinIndex : joinIdentifierList) {
-			joinList.add((SQLJoin) this.getRSCRepository().getRSC(joinIndex));
+			joinList.add((SQLJoin) this.getRepository().getSQLConstruct(joinIndex));
 		}
 		return joinList;
 	}
@@ -68,15 +68,15 @@ public class SQLTable extends AbstractSQLConstruct implements SQLTargetResource 
 
 	@Override
 	public SQLTable withJoin(final SQLJoin join) {
-		this.joinIdentifierList.add(this.getRSCRepository().addRSC(join));
-		join.setReferencingRSC(this);
+		this.joinIdentifierList.add(this.getRepository().addSQLConstruct(join));
+		join.setReferencingConstruct(this);
 		return this;
 	}
 
 	@Override
 	public SQLTable withCorrelationName(final SQLCorrelationName correlationName) {
-		this.correlationNameIndex = this.getRSCRepository().addRSC(correlationName);
-		correlationName.setReferencingRSC(this);
+		this.correlationNameIndex = this.getRepository().addSQLConstruct(correlationName);
+		correlationName.setReferencingConstruct(this);
 		return this;
 	}
 

@@ -16,14 +16,14 @@ public class SQLSelectedItem extends AbstractSQLConstruct {
 	}
 
 	public SQLSelectedItem withSelectedItem(final SQLConstruct selectedItem) {
-		this.selectedItemIndex = this.getRSCRepository().addRSC(selectedItem);
-		selectedItem.setReferencingRSC(this);
+		this.selectedItemIndex = this.getRepository().addSQLConstruct(selectedItem);
+		selectedItem.setReferencingConstruct(this);
 		return this;
 	}
 
 	public SQLSelectedItem withCorrelationName(final SQLCorrelationName correlationName) {
-		this.correlationNameIndex = this.getRSCRepository().addRSC(correlationName);
-		correlationName.setReferencingRSC(this);
+		this.correlationNameIndex = this.getRepository().addSQLConstruct(correlationName);
+		correlationName.setReferencingConstruct(this);
 		return this;
 	}
 
@@ -32,15 +32,15 @@ public class SQLSelectedItem extends AbstractSQLConstruct {
 	}
 
 	public String getCorrelationName() {
-		return this.getRSCRepository().getRSC(correlationNameIndex).toSql();
+		return this.getRepository().getSQLConstruct(correlationNameIndex).toSql();
 	}
 
 	public SQLCorrelationName getRSCCorrelationName() {
-		return (SQLCorrelationName) this.getRSCRepository().getRSC(correlationNameIndex);
+		return (SQLCorrelationName) this.getRepository().getSQLConstruct(correlationNameIndex);
 	}
 
 	public SQLConstruct getSelectedItem() {
-		return this.getRSCRepository().getRSC(selectedItemIndex);
+		return this.getRepository().getSQLConstruct(selectedItemIndex);
 	}
 
 	@Override
