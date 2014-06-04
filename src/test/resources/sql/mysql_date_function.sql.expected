@@ -1,0 +1,1 @@
+SELECT a FROM T AS t, F AS f WHERE date(t.b) = f.c

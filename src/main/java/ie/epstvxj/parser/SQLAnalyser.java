@@ -39,6 +39,7 @@ import ie.epstvxj.sql.function.SQLMinFunction;
 import ie.epstvxj.sql.function.SQLNotFunction;
 import ie.epstvxj.sql.function.SQLNullFunction;
 import ie.epstvxj.sql.function.SQLSumFunction;
+import ie.epstvxj.sql.function.SQLUserDefinedFunction;
 import ie.epstvxj.sql.tokens.SQLSign;
 import ie.epstvxj.sql.value.SQLFloatValue;
 import ie.epstvxj.sql.value.SQLIntValue;
@@ -1190,5 +1191,12 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 	@Override
 	public void enterNull_specification(@NotNull final SQLGrammarParser.Null_specificationContext ctx) {
 		sqlConstructStack.push(SQLBuilder.init().nullValue());
+	}
+
+	@Override
+	public void exitUser_defined_function(@NotNull final SQLGrammarParser.User_defined_functionContext ctx) {
+		SQLUserDefinedFunction udf = SQLBuilder.function().udf(ctx.user_defined_function_type().getText(),
+				sqlConstructStack.pop());
+		sqlConstructStack.push(udf);
 	}
 }

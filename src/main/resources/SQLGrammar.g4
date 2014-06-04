@@ -1019,7 +1019,13 @@ nonparenthesized_value_expression_primary
                                 | value_expression_primary  Period identifier 
                                 | routine_invocation
                                 | parameterized_value
+                                | user_defined_function
                                 ;
+
+/* The following parts are used to capture Vender-specific functions */
+user_defined_function_type      : DATE;
+user_defined_function           : user_defined_function_type Left_Paren value_expression Right_Paren;
+
 parameterized_value             : Question_Mark ;
 column_reference                : basic_identifier_chain
                                 ;

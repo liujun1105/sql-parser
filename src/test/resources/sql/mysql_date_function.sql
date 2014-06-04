@@ -1,0 +1,1 @@
+select a from T t, F f where date(t.b) = f.c;
