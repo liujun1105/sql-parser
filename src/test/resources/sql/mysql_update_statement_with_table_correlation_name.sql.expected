@@ -1,0 +1,1 @@
+UPDATE release_dates AS rd SET room_list = 1 WHERE hotel_id = ? AND rate_plan_code IN (SELECT rate_plan_code FROM rate_plans AS rp WHERE rd.hotel_id = rp.hotel_id AND rp.booking_office_code = ? AND rp.stay_from <= rd.for_date AND rp.stay_to >= rd.for_date AND rp.selling = 0) AND for_date = ?

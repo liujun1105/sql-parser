@@ -1085,7 +1085,8 @@ insert_column_list  : column_name_list;
     14.11 <update_statement_searched> (p847)
     Update rows of a table.
  */
-update_statement_searched    : UPDATE target_table SET set_clause_list (where_clause)?;
+/* the rule (AS? correlation_name)? is not part of the ANSI SQL but is supported by MySQL */
+update_statement_searched    : UPDATE target_table (AS? correlation_name)? SET set_clause_list (where_clause)?;
 
 /*
     14.12 <set_clause_list> (p851)

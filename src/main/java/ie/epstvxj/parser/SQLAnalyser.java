@@ -69,7 +69,7 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 	private boolean							ignoreColumnName			= false;
 	private boolean							withinParenthesis			= false;
 	private boolean							withinGeneralSetFunction	= false;
-	private boolean							withInFromSubquery			= false;
+	private boolean							withinFromSubquery			= false;
 
 	private boolean							withinInsertStatement;
 	private boolean							withinUpdateStatement;
@@ -88,7 +88,7 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 		ignoreColumnName = false;
 		withinParenthesis = false;
 		withinGeneralSetFunction = false;
-		withInFromSubquery = false;
+		withinFromSubquery = false;
 
 		withinInsertStatement = false;
 		withinUpdateStatement = false;
@@ -125,7 +125,7 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 		LOG.trace(">>>> exitQuery_specification");
 		SQLSelect select = null;
 
-		if (!withInFromSubquery && !withinSubquery && queryContextStack.peek() == SQLQueryContext.SELECT) {
+		if (!withinFromSubquery && !withinSubquery && queryContextStack.peek() == SQLQueryContext.SELECT) {
 			select = SQLBuilder.build().select().withSQLQueryContext(queryContextStack.peek());
 		} else {
 			select = SQLBuilder.build().subSelect().withSQLQueryContext(queryContextStack.peek());
@@ -1129,12 +1129,12 @@ public class SQLAnalyser extends SQLGrammarBaseListener {
 
 	@Override
 	public void enterFrom_subquery(@NotNull final SQLGrammarParser.From_subqueryContext ctx) {
-		withInFromSubquery = true;
+		withinFromSubquery = true;
 	}
 
 	@Override
 	public void exitFrom_subquery(@NotNull final SQLGrammarParser.From_subqueryContext ctx) {
-		withInFromSubquery = false;
+		withinFromSubquery = false;
 	}
 
 	@Override
