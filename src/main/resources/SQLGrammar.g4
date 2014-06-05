@@ -586,8 +586,7 @@ all_fields_reference        : value_expression_primary Period Asterisk
                               (AS Left_Paren column_name_list Right_Paren)?
                             ;
 result_limit                : LIMIT 
-                              ((offset Comma)? row_count)
-                              | (row_count OFFSET offset)
+                            (offset Comma)? (row_count | (OFFSET? offset))+
                             ;
 // sql dialect
 offset    : unsigned_numeric_literal;
